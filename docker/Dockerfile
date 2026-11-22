@@ -8,7 +8,7 @@ RUN install2.r --error --skipinstalled --ncpus 2 data.table dplyr tidyr openxlsx
 # Werkzeuge der Analyse: Tests, Benchmarks, Berichte, Code-Metriken
 RUN install2.r --error --skipinstalled --ncpus 2 testthat bench knitr rmarkdown ggrepel gridExtra remotes
 RUN install2.r --error --skipinstalled --ncpus 2 lintr cyclocomp
-RUN R -q -e "remotes::install_github('dskowasch/sicr', ref = 'c0ad2ade80dad83b1d6faec1bd4e34bd20233c92', dependencies = FALSE, upgrade = 'never')" \
+RUN R -q -e "remotes::install_url('https://github.com/dskowasch/sicr/archive/c0ad2ade80dad83b1d6faec1bd4e34bd20233c92.tar.gz', dependencies = FALSE, upgrade = 'never')" \
     && R -q -e "library(sicr); cat('sicr', as.character(packageVersion('sicr')), '\n')"
 ENV HOME=/tmp
 WORKDIR /work
