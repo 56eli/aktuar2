@@ -1,0 +1,17 @@
+"id","ausdruck","median_ms","speicher_mb"
+"A-V01","original",68.246,25.416
+"A-V01","verbessert",38.589,5.022
+"A-V02","original",2.801,0.054
+"A-V02","verbessert",4.135,0.226
+"B-V02","original",1.648,1.611
+"B-V02","verbessert",2.246,5.586
+"C-V02","original",10.521,3.387
+"C-V02","verbessert",1.246,0.442
+"D-V01","original",4.727,2.074
+"D-V01","verbessert",1.046,2.567
+"D-V02","original",1.129,0.586
+"D-V02","verbessert",0.344,0.43
+"E-V01","original",8.918,15.259
+"E-V01","verbessert",1.385,0.009
+"F-V01","original",145.481,7.416
+"F-V01","verbessert",62.509,0.975
