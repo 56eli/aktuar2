@@ -21,12 +21,10 @@ test_that("D-F06: generate_small_claims_future_annuities bricht bei einem Anfall
    expect_error(do.call(generate_small_claims_future_annuities, inputs), "subscript out of bounds")
 })
 
-test_that("D-F06: Korrektur liefert eine Nullprognose mit korrekten Dimensionen", {
+test_that("D-F06: Korrektur bricht mit verstaendlicher Meldung ab", {
    source(file.path(Sys.getenv("AKTUAR_ROOT", "../.."), "verbesserungen", "D-F06.R"))
 
    inputs <- make_inputs_f06()
-   result <- do.call(generate_small_claims_future_annuities_v, inputs)
-
-   expect_equal(dim(result), c(1L, 251L))
-   expect_equal(sum(result), 0)
+   expect_error(do.call(generate_small_claims_future_annuities_v, inputs),
+                "mindestens zwei Anfall- und Abwicklungsjahre")
 })

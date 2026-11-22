@@ -1,0 +1,277 @@
+---
+title: "Prüfbericht: R-Paket sicr 1.1.1"
+subtitle: "Paperkonformität, Fehler und Verbesserungen aller 83 Funktionen"
+output:
+  github_document:
+    toc: true
+    toc_depth: 2
+    fig_width: 8
+    fig_height: 4.5
+    dev: png
+    html_preview: false
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE, dpi = 110,
+                      fig.path = "abbildungen/")
+library(ggplot2)
+wurzel <- normalizePath("..")
+datei <- function(...) file.path(wurzel, ...)
+
+# Befundlisten aus den sechs Gruppenanalysen lesen: jede Tabellenzeile "| X-Ynn | ... |"
+lies_befunde <- function(f) {
+  z <- grep("^\\| [A-F]-[A-Z][0-9]+ \\|", readLines(f, encoding = "UTF-8"), value = TRUE)
+  t <- do.call(rbind, lapply(strsplit(z, "\\|"), function(x) trimws(x[2:6])))
+  data.frame(id = t[, 1], funktion = t[, 2], art = t[, 3], schwere = t[, 4],
+             beschreibung = t[, 5], stringsAsFactors = FALSE)
+}
+gruppen <- c(A = "Kernsimulation", B = "Datenaufbereitung", C = "IBNR, Sonderschäden, RV",
+             D = "Renten, Basisschäden", E = "Ausgabe, Eingabeprüfungen", F = "Plots, Backtesting")
+befunde <- do.call(rbind, lapply(sort(Sys.glob(datei("analyse", "[A-F]_*.md"))), lies_befunde))
+befunde$gruppe <- substr(befunde$id, 1, 1)
+befunde$typ <- substr(befunde$id, 3, 3)
+fehler <- befunde[befunde$typ == "F", ]
+stufen <- c("kritisch", "hoch", "mittel", "niedrig")
+fehler$schwere <- factor(fehler$schwere, stufen)
+fehler <- fehler[order(fehler$schwere, fehler$id), ]
+verb <- befunde[befunde$typ == "V", ]
+
+tests <- read.csv(datei("ergebnisse", "testergebnisse.csv"))
+bench <- read.csv(datei("ergebnisse", "benchmarks.csv"))
+metr_d <- read.csv(datei("ergebnisse", "metriken_dateien.csv"))
+metr_k <- read.csv(datei("ergebnisse", "metriken_komplexitaet.csv"))
+metr_l <- read.csv(datei("ergebnisse", "metriken_lintr.csv"))
+
+# Paperabgleich: Einstufungen der Matrix zählen
+pz <- grep("^\\| D\\.[0-9]+\\.[0-9]+ \\|", readLines(datei("analyse", "paper_abgleich.md"), encoding = "UTF-8"),
+           value = TRUE)
+paper <- data.frame(nr = trimws(sapply(strsplit(pz, "\\|"), `[`, 2)),
+                    einstufung = trimws(sapply(strsplit(pz, "\\|"), `[`, 5)))
+farben <- c(kritisch = "#8c1c13", hoch = "#d1495b", mittel = "#edae49", niedrig = "#9fb4c7")
+md_tab <- function(df) knitr::kable(df, format = "pipe", row.names = FALSE)
+```
+
+## Kurzfassung
+
+Geprüft wurde das R-Paket [sicr](https://github.com/dskowasch/sicr) von Dirk Skowasch in Version 1.1.1
+(Commit `c0ad2ad`), und zwar alle `r nrow(metr_k)` Funktionen. Maßstab war der DAV-Ergebnisbericht
+[„Stochastische Einzelschadenreservierung“ vom 04.02.2025](https://aktuar.de/content/PDF/Fachwissen/2025-02-04_DAV_SV_EB_Stochastische_Einzelschadenreservierung.pdf).
+Gerechnet wurde ausschließlich in R `r paste(R.version$major, R.version$minor, sep = ".")`.
+
+- **Paperkonformität:** Das Verfahren ist im Kern so umgesetzt, wie der Bericht es beschreibt: Ziehung aus
+  Pools je Abwicklungsjahr und Reserveklasse, linearer Nachlauf, additives Spätschadenmodell, Renten mit
+  zufälligem Sterbejahr, Rückversicherung je Pfad. Von den `r nrow(paper)` Prüfpunkten aus Anhang D sind
+  `r sum(paper$einstufung == "konform")` konform, `r sum(paper$einstufung == "konform (Fehler)")` konform, aber
+  durch einen belegten Fehler beeinträchtigt, `r sum(paper$einstufung == "abweichend")` methodisch abweichend und
+  `r sum(paper$einstufung == "fehlt")` fehlen (vor allem das Ultimate-Backtesting).
+- **Fehler:** `r nrow(fehler)` Fehler sind mit je einem testthat-Test belegt, davon
+  `r sum(fehler$schwere == "kritisch")` kritisch und `r sum(fehler$schwere == "hoch")` hoch. Die wichtigsten:
+  In den aggregierten Großschadendreiecken fehlt der XL-Anteil der Spätgroßschäden (E-F01). Mehrere Funktionen
+  ordnen Daten nach Zeilenposition statt nach Jahr zu und rechnen bei unsortierter Eingabe ohne Meldung falsch
+  (B-F01, C-F03, D-F03, E-F02). Das Backtesting vergleicht nominale Prognosen mit deflationierten Ist-Werten
+  (F-F01).
+- **Verbesserungen:** `r nrow(verb)` Vorschläge liegen als lauffähiger Code vor, jeweils mit Gleichheitstest
+  gegen das Original. Die Effizienzvorschläge wurden gemessen, zwei davon sind langsamer und nur noch als
+  Lesbarkeitsgewinn geführt.
+- **Belege:** `r nrow(tests)` Tests, davon `r sum(tests$ok)` bestanden. Ein grüner Fehlertest heißt: Der Fehler
+  besteht in sicr 1.1.1.
+
+## Gegenstand und Vorgehen
+
+```{r umfang}
+tab <- data.frame(
+  Gruppe = paste0(names(gruppen), ": ", gruppen),
+  Funktionen = c(6, 28, 10, 16, 14, 9),
+  Fehler = as.vector(table(factor(fehler$gruppe, names(gruppen)))),
+  Verbesserungen = as.vector(table(factor(verb$gruppe, names(gruppen)))),
+  Analyse = sprintf("[%s](../analyse/%s)", basename(Sys.glob(datei("analyse", "[A-F]_*.md"))),
+                    basename(Sys.glob(datei("analyse", "[A-F]_*.md")))))
+md_tab(tab)
+```
+
+Die Prüfung war gestaffelt. Die Kernfunktionen (Simulation, Pools, Nachlauf, IBNR, Renten, Rückversicherung)
+wurden Zeile für Zeile gegen den Bericht gelesen. Hilfs-, Plot- und Excel-Funktionen wurden als Code-Review
+geprüft. Für jede Funktion gibt es einen Abschnitt in der Analyse ihrer Gruppe mit Zweck, Paperbezug (Abschnitt
+und Seite), Fehlern, Verbesserungen und Hinweisen.
+
+**Beweisstandard.** Ein Fehler zählt nur, wenn ein testthat-Test ihn zeigt (`befunde/test-<ID>.R`). Der erste
+Test prüft das fehlerhafte Verhalten von sicr 1.1.1 und ist grün, solange der Fehler besteht. Gibt es eine
+Korrektur, zeigt ein zweiter Test in derselben Datei, dass `verbesserungen/<ID>.R` richtig rechnet. Ohne Test
+heißt eine Beobachtung „Verdacht (unbelegt)“ oder „Hinweis“.
+
+**Gegenprüfung.** Jeder Befund wurde danach mit dem Auftrag gegengelesen, ihn zu widerlegen
+([A–C](../analyse/gegenpruefung_ABC.md), [D–F](../analyse/gegenpruefung_DEF.md)). Daraufhin wurden sechs
+Schweregrade gesenkt (A-F03, B-F02, D-F01, E-F04, E-F06, E-F07), drei Begründungen berichtigt (D-F03, E-F02,
+F-F02) und ein Hinweis widerlegt (F-H04: das Beispiel läuft über partielle Argumentzuordnung). Die Korrektur zu
+D-F06 wurde umgebaut, sie liefert jetzt eine Fehlermeldung statt einer stillen Nullprognose. D-F01 war in der
+ersten Fassung falsch begründet und ist neu belegt. Die schweren Befunde hat der Prüfer zusätzlich selbst am
+Quellcode nachvollzogen.
+
+**Schwereskala.** *kritisch*: Reserve oder Verteilung im Normalfall falsch · *hoch*: falsch in realistischen
+Datenlagen · *mittel*: Randfall oder Absturz mit Meldung · *niedrig*: Stil, Doku.
+
+## Paperkonformität
+
+```{r paper, fig.height = 2.6}
+paper$einstufung <- factor(paper$einstufung, c("konform", "konform (Fehler)", "abweichend", "fehlt"))
+ggplot(paper, aes(y = "Anhang D", fill = einstufung)) +
+  geom_bar(position = position_stack(reverse = TRUE), width = 0.6) +
+  scale_fill_manual(values = c("konform" = "#2a9d8f", "konform (Fehler)" = "#e9c46a",
+                               "abweichend" = "#e76f51", "fehlt" = "#6c757d"), name = NULL) +
+  labs(x = "Prüfpunkte", y = NULL, title = "46 Prüfpunkte der Checkliste D.1–D.11") +
+  theme_minimal(base_size = 12) + theme(legend.position = "bottom")
+```
+
+Die vollständige Matrix mit Fundstelle im Code und Begründung je Punkt steht in
+[`analyse/paper_abgleich.md`](../analyse/paper_abgleich.md). Die methodischen Abweichungen und Lücken:
+
+| Punkt | Befund |
+|---|---|
+| D.6.1 Spätgroßschadenanzahl | Das letzte beobachtbare Abwicklungsjahr N geht nicht in das additive Modell ein (C-F05). |
+| D.9.1 Rückversicherungsprogramm | AAD/AAL sind nicht umgesetzt (in sicr dokumentiert). Zusätzlich setzt die Indexklausel ein Jahr zu früh an (C-F04). |
+| D.2.2 Großschadenschwelle G | Es wird nicht geprüft, ob G unter der kleinsten Priorität liegt. Der Bericht empfiehlt das. |
+| D.10.3 Ultimate-Backtesting | Fehlt. Vorhanden ist nur das Cashflow-Backtesting des ersten Folgejahres (F-H01). |
+| D.11.4 Ergebnisdokumentation | Pflicht des Anwenders, das Paket bietet keine Ergebnissammlung. |
+
+Kapitel 3 des Berichts (Anwendungsstudien) lässt sich mangels Daten nicht nachrechnen. Geprüft wurden dort nur
+die Definitionen, etwa die des Backtestings.
+
+## Fehler
+
+```{r fehlerplot, fig.height = 3.6}
+fp <- as.data.frame(table(gruppe = factor(fehler$gruppe, names(gruppen)), schwere = fehler$schwere))
+ggplot(fp, aes(x = gruppe, y = Freq, fill = schwere)) +
+  geom_col(position = position_stack(reverse = TRUE)) +
+  scale_fill_manual(values = farben, name = NULL, drop = FALSE) +
+  scale_x_discrete(labels = paste0(names(gruppen), "\n", sub(",.*", "", gruppen))) +
+  labs(x = NULL, y = "belegte Fehler", title = "Belegte Fehler je Gruppe und Schwere") +
+  theme_minimal(base_size = 12) + theme(legend.position = "bottom")
+```
+
+```{r fehlertab}
+ft <- fehler
+ft$Beleg <- sprintf("[Test](../befunde/test-%s.R)", ft$id)
+ft$Korrektur <- ifelse(file.exists(datei("verbesserungen", paste0(ft$id, ".R"))),
+                       sprintf("[Code](../verbesserungen/%s.R)", ft$id), "–")
+md_tab(setNames(ft[, c("id", "schwere", "funktion", "beschreibung", "Beleg", "Korrektur")],
+                c("ID", "Schwere", "Funktion", "Befund", "Beleg", "Korrektur")))
+```
+
+### Die schweren Befunde im Einzelnen
+
+**E-F01 (kritisch): XL-Anteil der Spätgroßschäden fehlt in der Aggregation.** `sicr()` schreibt den XL-Anteil
+auch für die IBNR-Zeilen (`R/sicr.R:592`). `aggregate_large_claims_results()` übernimmt für das XL-Dreieck aber
+nur die bekannten Schäden (`R/aggregate_large_claims_results.R:181`), für die Quote dagegen alle Zeilen. Wer
+mit XL-Rückversicherung und Spätgroßschäden rechnet, erhält in den aggregierten Dreiecken einen zu kleinen
+RV-Anteil und eine zu hohe Nettoreserve. Die Zusammenfassung von `sicr()` selbst ist nicht betroffen.
+
+**Positionsabhängige Zuordnung (B-F01, C-F03, D-F03, E-F02, hoch).** Vier Funktionen gehen davon aus, dass ein
+Dataframe nach Jahr sortiert ist, und prüfen das nicht: historische Indizes, Exposure und zweimal die Quote der
+RV-Daten. Bei unsortierter Eingabe erhält ein Jahr ohne Meldung die Werte eines anderen. An anderer Stelle löst
+sicr dasselbe Problem richtig mit `match()` (`R/reinsurance.R:296`, `R/sicr.R:594`), daher folgen die Korrekturen
+diesem Muster.
+
+**A-F01 (hoch): Ausreißergrenzen im Nachlauf.** Die Nachlaufzahlungen werden zuerst auf das Niveau von
+`start_of_tail` hochskaliert und erst danach gekappt (`R/generate_pools.R:130-139`). Dokumentiert sind die
+Grenzen auf Indexjahrniveau. Sobald Grenzen gesetzt sind, kappen sie im Nachlauf also zu früh.
+
+**D-F07 (hoch): Künftige Basisrenten hängen vom Indexjahr ab.** Die additiven Faktoren beziehen sich auf
+Reserven, die auf `index_year` indexiert sind. Bei der Anwendung wird die Anzahl von `index_year` aus noch
+einmal indexiert (`R/small_claims_future_annuities.R:167-170, 311-315`). Das Ergebnis ändert sich deshalb mit dem
+Indexjahr, das eigentlich nur eine Rechenbasis ist. Bei 2 % Inflation macht das je Jahr Abstand den Faktor
+1/1,02 aus.
+
+**F-F01 (hoch): Backtesting nominal gegen deflationiert.** Die Simulation liefert nominale Zahlungen
+(`R/sicr.R:451`), der Ist-Wert im Backtesting ist aber `Ind_cl_payment_cal`, also auf das Indexjahr deflationiert
+(`R/plots.R:1239, 1466`). Bei 3 % Inflation und fünf Jahren Abstand erscheint die Prognose um rund 16 % zu hoch,
+obwohl sie stimmt.
+
+**D-F01 (mittel): Sterbealter bekannter Renten.** Die erste Zahlung ist zu Recht sicher. Danach rechnet sicr
+für das Jahr Cy+k mit q(x+k−1) statt q(x+k) (`R/annuity_functions.R:161, 172`). Mit den Beispieldaten des Pakets
+erhöht das die undiskontierten Rentenzahlungen um 1,86 %. Die Abweichung ist vorsichtig und hängt an der
+Alterskonvention. Für q(x+1) sprechen die Jahrgangsmethode der DAV-Tafeln und der Pool-Pfad desselben Pakets.
+
+## Verbesserungen
+
+```{r verbtab}
+vt <- verb
+vt$Code <- sprintf("[Code](../verbesserungen/%s.R)", vt$id)
+vt$Gleichheitstest <- sprintf("[Test](../tests/verbesserungen/test-%s.R)", vt$id)
+md_tab(setNames(vt[, c("id", "funktion", "schwere", "beschreibung", "Code", "Gleichheitstest")],
+                c("ID", "Funktion", "Ziel", "Vorschlag", "Code", "Gleichheitstest")))
+```
+
+### Benchmarks
+
+Alle Effizienzvorschläge wurden mit `bench::mark` (20 Iterationen, Median) auf den Beispieldaten oder
+konstruierten Eingaben gemessen ([`ergebnisse/benchmarks.csv`](../ergebnisse/benchmarks.csv)).
+
+```{r benchplot, fig.height = 3.8}
+b <- reshape(bench[, c("id", "ausdruck", "median_ms")], idvar = "id", timevar = "ausdruck",
+             direction = "wide")
+b$faktor <- b$median_ms.original / b$median_ms.verbessert
+b$id <- factor(b$id, b$id[order(b$faktor)])
+ggplot(b, aes(x = faktor, y = id, fill = faktor >= 1)) +
+  geom_col(width = 0.6) + geom_vline(xintercept = 1, linetype = 2) +
+  geom_text(aes(label = sprintf("%.1f×", faktor)), hjust = -0.15, size = 3.6) +
+  scale_x_log10(expand = expansion(mult = c(0, 0.15))) +
+  scale_fill_manual(values = c(`TRUE` = "#2a9d8f", `FALSE` = "#e76f51"), guide = "none") +
+  labs(x = "Beschleunigung (Median original / Median verbessert, log)", y = NULL,
+       title = "Laufzeit der Verbesserungen gegenüber sicr 1.1.1") +
+  theme_minimal(base_size = 12)
+```
+
+```{r benchtab}
+bt <- b[order(-b$faktor), ]
+md_tab(data.frame(ID = bt$id, `original (ms)` = bt$median_ms.original,
+                  `verbessert (ms)` = bt$median_ms.verbessert,
+                  Faktor = sprintf("%.1f", bt$faktor), check.names = FALSE))
+```
+
+A-V02 und B-V02 sind langsamer als das Original und werden deshalb nur als Lesbarkeitsgewinn geführt. E-V01
+ist auf einen materialisierten Vektor gemessen, weil `is.unsorted()` auf einer `seq_len()`-Folge sonst nur ein
+Merkmal abfragt und das Ergebnis schönen würde.
+
+## Codequalität
+
+```{r metriken}
+md_tab(setNames(metr_d[order(-metr_d$codezeilen), c("datei", "zeilen", "codezeilen", "roxygen",
+                                                    "duplikat_anteil")],
+                c("Datei", "Zeilen", "Codezeilen", "Roxygen-Zeilen", "Anteil doppelter Codezeilen")))
+```
+
+- **Umfang:** `r sum(metr_d$zeilen)` Zeilen in `r nrow(metr_d)` Dateien. Allein `plots.R` umfasst
+  `r metr_d$codezeilen[metr_d$datei == "plots.R"]` Codezeilen, davon gehören
+  `r round(100 * metr_d$duplikat_anteil[metr_d$datei == "plots.R"])` % zu mehrfach vorkommenden Zeilen
+  (ab 25 Zeichen). Die Backtesting-Funktionen bestehen weitgehend aus kopierten Blöcken (F-H02, F-V02).
+- **Komplexität:** `sicr()` hat eine zyklomatische Komplexität von
+  `r metr_k$komplexitaet[metr_k$funktion == "sicr"]` und erledigt Datenaufbereitung, Simulation, Renten, IBNR,
+  RV und Aggregation in einer Funktion. Die nächsten in der Rangfolge sind Eingabeprüfungen (Komplexität 12–18).
+- **lintr:** `r sum(metr_l$anzahl)` Meldungen (Standardregeln, Zeilenlänge 120, ohne Einrückungsregel). Inhaltlich
+  zählen vor allem `seq_linter` (`r metr_l$anzahl[metr_l$regel == "seq_linter"]`× `1:length(x)` bzw. `1:n`,
+  die Quelle von B-F03, D-F04, D-F05, E-F03 und F-F03) und `vector_logic_linter`
+  (`r metr_l$anzahl[metr_l$regel == "vector_logic_linter"]`× `&`/`|` in `if`). Der Rest ist Formatierung.
+
+## Grenzen der Prüfung
+
+- Die Befunde gelten für sicr 1.1.1 (Commit `c0ad2ad`). Neuere Versionen wurden nicht geprüft.
+- Die Fehlertests nutzen kleine konstruierte Eingaben. Wie stark sich ein Fehler auf eine echte Reserve auswirkt,
+  ist nur bei D-F01 auf den Beispieldaten beziffert.
+- Die Verbesserungen sind Einzelfunktionen und kein gepflegter Fork. Mehrere Korrekturen derselben Funktion
+  (z. B. drei Fassungen von `indices_ok_v()` in E-F04, E-F05 und E-V01) zeigen jeweils nur ihren eigenen Punkt.
+- Das Paper liegt aus urheberrechtlichen Gründen nicht im Repo. Zitiert wird nur mit Seitenzahl.
+
+## Reproduktion
+
+```sh
+docker build -t aktuar-r:1 docker
+docker run --rm -v "$PWD":/work -w /work aktuar-r:1 Rscript skripte/tests_ausfuehren.R
+docker run --rm -v "$PWD":/work -w /work aktuar-r:1 Rscript skripte/benchmarks.R
+git clone https://github.com/dskowasch/sicr /tmp/sicr && git -C /tmp/sicr checkout c0ad2ad
+docker run --rm -v "$PWD":/work -v /tmp/sicr:/sicr:ro -w /work aktuar-r:1 Rscript skripte/metriken.R
+docker run --rm -v "$PWD":/work -w /work/bericht aktuar-r:1 Rscript -e 'rmarkdown::render("bericht.Rmd")'
+```
+
+Das Image enthält R 4.4.2, sicr 1.1.1 an Commit `c0ad2ad` und die verwendeten Pakete in festen Versionen des
+Posit-Snapshots von rocker. Die GitHub-Action [`r-tests.yml`](../.github/workflows/r-tests.yml) führt die Tests
+bei jedem Push aus.

@@ -4,7 +4,9 @@ library(sicr)
 # gegen is.unsorted(). Gleiches Ergebnis (siehe tests/verbesserungen/test-E-V01.R),
 # aber ohne zusaetzliche Kopie des Vektors.
 
-aufsteigend <- seq_len(1000000)
+# c() materialisiert den Vektor: seq_len() wäre ALTREP mit Sortiert-Markierung,
+# dann antwortet is.unsorted() ohne zu prüfen und der Vergleich wäre geschönt.
+aufsteigend <- c(0L, seq_len(1000000))
 
 bench::mark(original = any(!aufsteigend == aufsteigend[order(aufsteigend)]),
             verbessert = is.unsorted(aufsteigend),

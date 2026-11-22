@@ -1,11 +1,11 @@
 "datei","test","ok","fehlgeschlagen","abbruch","uebersprungen","sekunden"
 "befunde/test-A-F01.R","A-F01: Nachlauf-Grenzen wirken auf dem falschen (hochskalierten) Niveau",TRUE,FALSE,FALSE,FALSE,0.05
-"befunde/test-A-F01.R","A-F01: generate_pools_v() kappt vor der Hochskalierung",TRUE,FALSE,FALSE,FALSE,0.04
+"befunde/test-A-F01.R","A-F01: generate_pools_v() kappt vor der Hochskalierung",TRUE,FALSE,FALSE,FALSE,0.05
 "befunde/test-A-F02.R","A-F02: start_of_tail = 2 erzeugt falsche Pretail-Pools",TRUE,FALSE,FALSE,FALSE,0.01
 "befunde/test-A-F02.R","A-F02: generate_pools_v() und pools2matrix_v() behandeln den Randfall",TRUE,FALSE,FALSE,FALSE,0.07
 "befunde/test-A-F03.R","A-F03: Zukunftsindex haengt von max(indices$Calendar_year) ab",TRUE,FALSE,FALSE,FALSE,0.06
 "befunde/test-A-F03.R","A-F03: future_index_factors_v() waehlt die Jahre ab last_orig_year",TRUE,FALSE,FALSE,FALSE,0.01
-"befunde/test-A-K01.R","A-K01: Erwartungswert eines Ziehungsschritts ist das Poolmittel",TRUE,FALSE,FALSE,FALSE,0.84
+"befunde/test-A-K01.R","A-K01: Erwartungswert eines Ziehungsschritts ist das Poolmittel",TRUE,FALSE,FALSE,FALSE,0.81
 "befunde/test-A-K02.R","A-K02: Nachlaufpfad folgt der Paperformel",TRUE,FALSE,FALSE,FALSE,0.02
 "befunde/test-B-F01.R","B-F01 expand_historic_indices ordnet Index_gross nach Zeilenposition statt nach Kalenderjahr zu",TRUE,FALSE,FALSE,FALSE,0.02
 "befunde/test-B-F01.R","B-F01 expand_historic_indices stuerzt bei Luecken vor first_orig_year ab",TRUE,FALSE,FALSE,FALSE,0.01
@@ -13,66 +13,65 @@
 "befunde/test-B-F02.R","B-F02 add_transition_factor bricht bei fehlendem index_year unklar ab",TRUE,FALSE,FALSE,FALSE,0.01
 "befunde/test-B-F02.R","B-F02 Korrektur add_transition_factor_v validiert index_year",TRUE,FALSE,FALSE,FALSE,0.02
 "befunde/test-B-F03.R","B-F03 inc2cum stuerzt bei einer leeren Matrix durch 1:0 ab",TRUE,FALSE,FALSE,FALSE,0.01
-"befunde/test-B-F03.R","B-F03 Korrektur inc2cum_v behandelt leere und normale Matrizen",TRUE,FALSE,FALSE,FALSE,0.01
+"befunde/test-B-F03.R","B-F03 Korrektur inc2cum_v behandelt leere und normale Matrizen",TRUE,FALSE,FALSE,FALSE,0.02
 "befunde/test-B-F04.R","B-F04 cum2inc liefert fuer einen leeren Vektor NA statt numeric(0)",TRUE,FALSE,FALSE,FALSE,0
 "befunde/test-B-F04.R","B-F04 Korrektur cum2inc_v behandelt leere Eingaben und bleibt sonst gleich",TRUE,FALSE,FALSE,FALSE,0.02
 "befunde/test-C-F01.R","C-F01: ungueltiger 'type' liefert still einen Nullvektor statt linear",TRUE,FALSE,FALSE,FALSE,0.01
 "befunde/test-C-F01.R","C-F01: Korrektur setzt 'type' wie dokumentiert auf linear",TRUE,FALSE,FALSE,FALSE,0.03
 "befunde/test-C-F02.R","C-F02: ungueltiger 'output' liefert die volle Matrix statt 'future'",TRUE,FALSE,FALSE,FALSE,0.04
 "befunde/test-C-F02.R","C-F02: Korrektur liefert fuer alle gueltigen 'output' dasselbe wie das Original",TRUE,FALSE,FALSE,FALSE,0.01
-"befunde/test-C-F03.R","C-F03: unsortierte exposure wird falsch zugeordnet",FALSE,TRUE,FALSE,FALSE,0.01
+"befunde/test-C-F03.R","C-F03: unsortierte exposure wird falsch zugeordnet",TRUE,FALSE,FALSE,FALSE,0.01
 "befunde/test-C-F03.R","C-F03: Korrektur ist unabhaengig von der Zeilenreihenfolge der exposure",TRUE,FALSE,FALSE,FALSE,0.02
 "befunde/test-C-F04.R","C-F04: Indexklausel greift schon im Basisjahr",TRUE,FALSE,FALSE,FALSE,0.04
 "befunde/test-C-F04.R","C-F04: Korrektur indexiert weiterhin ab dem Jahr nach dem Basisjahr",TRUE,FALSE,FALSE,FALSE,0.01
-"befunde/test-C-F05.R","C-F05 (a): Sum_of_exposures wird auf ganze Zahlen abgeschnitten",FALSE,TRUE,FALSE,FALSE,0.03
-"befunde/test-C-F05.R","C-F05 (b): Spaetgrossschaden im letzten Abwicklungsjahr wird ignoriert",TRUE,FALSE,FALSE,FALSE,0.05
-"befunde/test-D-F01.R","D-F01: Sterbewahrscheinlichkeiten bekannter Renten sind um ein Jahr verschoben",TRUE,FALSE,FALSE,FALSE,0.01
-"befunde/test-D-F01.R","D-F01: Korrektur bewertet die erste zukuenftige Zahlung mit S(1)",TRUE,FALSE,FALSE,FALSE,0.02
+"befunde/test-C-F05.R","C-F05: Spaetgrossschaden im letzten Abwicklungsjahr wird ignoriert",TRUE,FALSE,FALSE,FALSE,0.05
+"befunde/test-D-F01.R","D-F01: sicr bewertet die Zahlung 2025 mit q(50) statt q(51)",TRUE,FALSE,FALSE,FALSE,0.01
+"befunde/test-D-F01.R","D-F01: Korrektur rechnet für bekannte Renten mit dem Alter im Folgejahr",TRUE,FALSE,FALSE,FALSE,0.01
 "befunde/test-D-F02.R","D-F02: compute_small_claims liefert ohne RV-Programm keine Nullmatrix",TRUE,FALSE,FALSE,FALSE,0.01
-"befunde/test-D-F02.R","D-F02: Korrektur liefert die dokumentierte Nullmatrix",TRUE,FALSE,FALSE,FALSE,0.03
-"befunde/test-D-F03.R","D-F03: Quota-Share wird positionsabhaengig statt nach Anfalljahr zugeordnet",TRUE,FALSE,FALSE,FALSE,0.04
-"befunde/test-D-F03.R","D-F03: Korrektur ordnet die Quote dem richtigen Anfalljahr zu",TRUE,FALSE,FALSE,FALSE,0.09
-"befunde/test-D-F04.R","D-F04: generate_pattern bricht bei einem einzigen Abwicklungsjahr ab",TRUE,FALSE,FALSE,FALSE,0.03
-"befunde/test-D-F04.R","D-F04: Korrektur liefert fuer ein Jahr einen leeren Pattern-Vektor",TRUE,FALSE,FALSE,FALSE,0.11
-"befunde/test-D-F05.R","D-F05: fill_up_triangle bricht bei einem einzigen Abwicklungsjahr ab",TRUE,FALSE,FALSE,FALSE,0.02
-"befunde/test-D-F05.R","D-F05: Korrektur fuellt auch ein einspaltiges Dreieck",TRUE,FALSE,FALSE,FALSE,0.05
+"befunde/test-D-F02.R","D-F02: Korrektur liefert die dokumentierte Nullmatrix",TRUE,FALSE,FALSE,FALSE,0.02
+"befunde/test-D-F03.R","D-F03: Quota-Share wird positionsabhaengig statt nach Anfalljahr zugeordnet",TRUE,FALSE,FALSE,FALSE,0.01
+"befunde/test-D-F03.R","D-F03: Korrektur ordnet die Quote dem richtigen Anfalljahr zu",TRUE,FALSE,FALSE,FALSE,0.03
+"befunde/test-D-F04.R","D-F04: generate_pattern bricht bei einem einzigen Abwicklungsjahr ab",TRUE,FALSE,FALSE,FALSE,0.01
+"befunde/test-D-F04.R","D-F04: Korrektur liefert fuer ein Jahr einen leeren Pattern-Vektor",TRUE,FALSE,FALSE,FALSE,0.02
+"befunde/test-D-F05.R","D-F05: fill_up_triangle bricht bei einem einzigen Abwicklungsjahr ab",TRUE,FALSE,FALSE,FALSE,0.01
+"befunde/test-D-F05.R","D-F05: Korrektur fuellt auch ein einspaltiges Dreieck",TRUE,FALSE,FALSE,FALSE,0.03
 "befunde/test-D-F06.R","D-F06: generate_small_claims_future_annuities bricht bei einem Anfalljahr ab",TRUE,FALSE,FALSE,FALSE,0.01
-"befunde/test-D-F06.R","D-F06: Korrektur liefert eine Nullprognose mit korrekten Dimensionen",FALSE,FALSE,TRUE,FALSE,0.01
+"befunde/test-D-F06.R","D-F06: Korrektur bricht mit verstaendlicher Meldung ab",TRUE,FALSE,FALSE,FALSE,0.01
 "befunde/test-D-F07.R","D-F07: zukuenftige Basis-Renten haengen vom willkuerlichen Indexjahr ab",TRUE,FALSE,FALSE,FALSE,0.01
-"befunde/test-D-F07.R","D-F07: Korrektur ist unabhaengig vom Indexjahr",TRUE,FALSE,FALSE,FALSE,0.08
-"befunde/test-E-F01.R","E-F01: XL-Anteil der IBNR-Spaetgrossschaeden fehlt in large_ceded_xl_payments",TRUE,FALSE,FALSE,FALSE,0.02
+"befunde/test-D-F07.R","D-F07: Korrektur ist unabhaengig vom Indexjahr",TRUE,FALSE,FALSE,FALSE,0.07
+"befunde/test-E-F01.R","E-F01: XL-Anteil der IBNR-Spaetgrossschaeden fehlt in large_ceded_xl_payments",TRUE,FALSE,FALSE,FALSE,0.03
 "befunde/test-E-F01.R","E-F01: Korrektur nimmt den XL-Anteil der IBNR-Zeilen mit auf",TRUE,FALSE,FALSE,FALSE,0.02
-"befunde/test-E-F02.R","E-F02: Quote wird ueber die Zeilenposition statt ueber das Anfalljahr zugeordnet",TRUE,FALSE,FALSE,FALSE,0.03
-"befunde/test-E-F02.R","E-F02: Korrektur ordnet die Quote dem Anfalljahr zu",TRUE,FALSE,FALSE,FALSE,0.02
-"befunde/test-E-F03.R","E-F03: leere Liste bekannter Grossschaeden bricht mit unklarem Fehler ab",TRUE,FALSE,FALSE,FALSE,0.04
+"befunde/test-E-F02.R","E-F02: Quote wird ueber die Zeilenposition statt ueber das Anfalljahr zugeordnet",TRUE,FALSE,FALSE,FALSE,0.02
+"befunde/test-E-F02.R","E-F02: Korrektur ordnet die Quote dem Anfalljahr zu",TRUE,FALSE,FALSE,FALSE,0.03
+"befunde/test-E-F03.R","E-F03: leere Liste bekannter Grossschaeden bricht mit unklarem Fehler ab",TRUE,FALSE,FALSE,FALSE,0.01
 "befunde/test-E-F03.R","E-F03: Korrektur liefert Nullmatrizen fuer die bekannten Schaeden",TRUE,FALSE,FALSE,FALSE,0.03
-"befunde/test-E-F04.R","E-F04: indices_ok prueft die Spaltenstruktur nicht (Index_re darf fehlen)",TRUE,FALSE,FALSE,FALSE,0.05
-"befunde/test-E-F04.R","E-F04: Korrektur erkennt die fehlende Spalte",TRUE,FALSE,FALSE,FALSE,0.24
-"befunde/test-E-F05.R","E-F05: indices_ok gibt fuer NULL den Character-Wert ""FALSE"" zurueck",TRUE,FALSE,FALSE,FALSE,0.01
+"befunde/test-E-F04.R","E-F04: indices_ok prueft die Spaltenstruktur nicht (Index_re darf fehlen)",TRUE,FALSE,FALSE,FALSE,0.01
+"befunde/test-E-F04.R","E-F04: Korrektur erkennt die fehlende Spalte",TRUE,FALSE,FALSE,FALSE,0.04
+"befunde/test-E-F05.R","E-F05: indices_ok gibt fuer NULL den Character-Wert ""FALSE"" zurueck",TRUE,FALSE,FALSE,FALSE,0
 "befunde/test-E-F05.R","E-F05: Korrektur gibt logisches FALSE zurueck",TRUE,FALSE,FALSE,FALSE,0.04
 "befunde/test-E-F06.R","E-F06: mortality_ok prueft die Wahrscheinlichkeiten wegen Tippfehler nicht",TRUE,FALSE,FALSE,FALSE,0.01
-"befunde/test-E-F06.R","E-F06: Korrektur erkennt unzulaessige Wahrscheinlichkeiten",TRUE,FALSE,FALSE,FALSE,0.05
+"befunde/test-E-F06.R","E-F06: Korrektur erkennt unzulaessige Wahrscheinlichkeiten",TRUE,FALSE,FALSE,FALSE,0.06
 "befunde/test-E-F07.R","E-F07: reinsurance_ok prueft die Spalte Limit nicht",TRUE,FALSE,FALSE,FALSE,0.01
-"befunde/test-E-F07.R","E-F07: Korrektur verlangt die Spalte Limit",TRUE,FALSE,FALSE,FALSE,0.11
-"befunde/test-E-F08.R","E-F08: add_sicr_worksheet setzt die globale Option openxlsx2.string_nums und laesst sie stehen",TRUE,FALSE,FALSE,FALSE,0.89
+"befunde/test-E-F07.R","E-F07: Korrektur verlangt die Spalte Limit",TRUE,FALSE,FALSE,FALSE,0.04
+"befunde/test-E-F08.R","E-F08: add_sicr_worksheet setzt die globale Option openxlsx2.string_nums und laesst sie stehen",TRUE,FALSE,FALSE,FALSE,0.99
 "befunde/test-E-F08.R","E-F08: Korrektur stellt den alten Optionswert wieder her",TRUE,FALSE,FALSE,FALSE,0.25
 "befunde/test-F-F01.R","F-F01: 1y-Backtesting vergleicht nominale Erwartung mit indexiertem Ist",TRUE,FALSE,FALSE,FALSE,0.12
-"befunde/test-F-F01.R","F-F01: Korrektur vergleicht Erwartung und Ist auf nominaler Basis",TRUE,FALSE,FALSE,FALSE,0.21
+"befunde/test-F-F01.R","F-F01: Korrektur vergleicht Erwartung und Ist auf nominaler Basis",TRUE,FALSE,FALSE,FALSE,0.23
 "befunde/test-F-F02.R","F-F02: Legende im Einzelschaden-Backtesting ist um zwei Baender verschoben",TRUE,FALSE,FALSE,FALSE,0.05
 "befunde/test-F-F02.R","F-F02: Korrektur beschriftet die Quantilsbaender richtig",TRUE,FALSE,FALSE,FALSE,0.11
 "befunde/test-F-F03.R","F-F03: Mehrjahres-Backtesting erfindet ohne Folgejahr ein zweites Jahr",TRUE,FALSE,FALSE,FALSE,0.04
 "befunde/test-F-F03.R","F-F03: Korrektur bricht bei fehlendem Folgejahr verstaendlich ab",TRUE,FALSE,FALSE,FALSE,0.09
-"tests/verbesserungen/test-A-V01.R","A-V01: pools2dataframe_v() liefert dasselbe Ergebnis",FALSE,TRUE,FALSE,FALSE,0.04
-"tests/verbesserungen/test-A-V02.R","A-V02: get_matrix_info_v() ist fuer Skalare identisch",TRUE,FALSE,FALSE,FALSE,1.15
+"tests/verbesserungen/test-A-V01.R","A-V01: pools2dataframe_v() liefert dasselbe Ergebnis",TRUE,FALSE,FALSE,FALSE,0.03
+"tests/verbesserungen/test-A-V02.R","A-V02: get_matrix_info_v() ist fuer Skalare identisch",TRUE,FALSE,FALSE,FALSE,1.16
 "tests/verbesserungen/test-A-V02.R","A-V02: get_matrix_info_v() ist fuer Vektoren identisch",TRUE,FALSE,FALSE,FALSE,0.02
 "tests/verbesserungen/test-B-V01.R","B-V01 tail_factor_v liefert dieselben Faktoren wie tail_factor",TRUE,FALSE,FALSE,FALSE,0.02
-"tests/verbesserungen/test-B-V02.R","B-V02 cal_year2dev_year_v liefert gleiche Dreiecke",TRUE,FALSE,FALSE,FALSE,0.02
-"tests/verbesserungen/test-C-V01.R","C-V01: vektorisierte Pools sind identisch zum Original",TRUE,FALSE,FALSE,FALSE,0.02
-"tests/verbesserungen/test-C-V02.R","C-V02: base-R-Variante liefert dieselbe Tabelle wie das Original",TRUE,FALSE,FALSE,FALSE,0.04
+"tests/verbesserungen/test-B-V02.R","B-V02 cal_year2dev_year_v liefert gleiche Dreiecke",TRUE,FALSE,FALSE,FALSE,0.04
+"tests/verbesserungen/test-C-V01.R","C-V01: vektorisierte Pools sind identisch zum Original",TRUE,FALSE,FALSE,FALSE,0.06
+"tests/verbesserungen/test-C-V02.R","C-V02: base-R-Variante liefert dieselbe Tabelle wie das Original",TRUE,FALSE,FALSE,FALSE,0.07
 "tests/verbesserungen/test-C-V02.R","C-V02: leere Matrix bleibt leer",TRUE,FALSE,FALSE,FALSE,0
 "tests/verbesserungen/test-D-V01.R","D-V01: generate_annuity_payments_v liefert dasselbe wie das Original",TRUE,FALSE,FALSE,FALSE,0.03
-"tests/verbesserungen/test-D-V02.R","D-V02: rollout_best_estimate_v liefert dasselbe wie das Original",TRUE,FALSE,FALSE,FALSE,0.03
-"tests/verbesserungen/test-E-V01.R","E-V01: indices_ok_v liefert dieselben Ergebnisse wie indices_ok",TRUE,FALSE,FALSE,FALSE,0.04
+"tests/verbesserungen/test-D-V02.R","D-V02: rollout_best_estimate_v liefert dasselbe wie das Original",TRUE,FALSE,FALSE,FALSE,0.04
+"tests/verbesserungen/test-E-V01.R","E-V01: indices_ok_v liefert dieselben Ergebnisse wie indices_ok",TRUE,FALSE,FALSE,FALSE,0.05
 "tests/verbesserungen/test-E-V02.R","E-V02: exposure_ok_v liefert dieselben Ergebnisse wie exposure_ok",TRUE,FALSE,FALSE,FALSE,0.03
-"tests/verbesserungen/test-F-V01.R","F-V01: plot_pools_overview_v liefert dieselben vier Grafiken",TRUE,FALSE,FALSE,FALSE,0.74
-"tests/verbesserungen/test-F-V02.R","F-V02: plot_reserve_vs_be_v liefert dieselben zwei Grafiken",TRUE,FALSE,FALSE,FALSE,0.26
+"tests/verbesserungen/test-F-V01.R","F-V01: plot_pools_overview_v liefert dieselben vier Grafiken",TRUE,FALSE,FALSE,FALSE,0.76
+"tests/verbesserungen/test-F-V02.R","F-V02: plot_reserve_vs_be_v liefert dieselben zwei Grafiken",TRUE,FALSE,FALSE,FALSE,0.31

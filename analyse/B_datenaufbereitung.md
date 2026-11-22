@@ -17,7 +17,7 @@ Die beiden Dateien enthalten die Datenaufbereitung für die stochastische Einzel
 ### `add_transition_factor()` — `R/data_functions.R:77-82`
 - **Zweck:** Ergänzt `Transition_factor` als Verhältnis der kumulierten Grossindizes zum gewählten Indexjahr.
 - **Paperbezug:** 2.1 Indexierung, S. 10 · nicht im Paper (Hilfsfunktion) · Setzt das konstante Indexierungsjahr des UAG-Standards um; die Ratio-Bildung entspricht der Indexierung auf das Niveau des Indexjahres.
-- **Fehler:** `B-F02` (mittel) In Zeile 79 wird der Nenner über `cumprod(...)[Calendar_year == index_year]` gebildet. Fehlt `index_year`, ist der Nenner `numeric(0)` und die Zuweisung bricht mit einer unklaren data.frame-Meldung ab; doppelte Kalenderjahre würden stillschweigend recycelt. Beleg: `befunde/test-B-F02.R`.
+- **Fehler:** `B-F02` (niedrig; Gegenprüfung: kein Rechenfehler, `indices_ok()` lehnt doppelte Jahre vorher ab, `R/data_checks.R:501-505`) In Zeile 79 wird der Nenner über `cumprod(...)[Calendar_year == index_year]` gebildet. Fehlt `index_year`, ist der Nenner `numeric(0)` und die Zuweisung bricht mit einer unklaren data.frame-Meldung ab; doppelte Kalenderjahre würden stillschweigend recycelt. Beleg: `befunde/test-B-F02.R`.
 - **Verbesserungen:** `B-F02` Korrektur: `verbesserungen/B-F02.R` validiert ein einzelnes, enthaltenes und eindeutiges `index_year`.
 
 ### `generate_claims_list()` — `R/data_functions.R:116-133`
@@ -140,7 +140,7 @@ Die beiden Dateien enthalten die Datenaufbereitung für die stochastische Einzel
 - **Zweck:** Wandelt ein Kalenderjahrdreieck in ein Abwicklungsjahrdreieck um.
 - **Paperbezug:** Hilfsfunktion, nicht im Paper · nicht im Paper (Hilfsfunktion).
 - **Fehler:** keine gefunden.
-- **Verbesserungen:** `B-V02` (effizienter) Vektorisierte Zellzuordnung statt zeilenweisem R-Loop; Code: `verbesserungen/B-V02.R`, Benchmark: `bench/B-V02.R`.
+- **Verbesserungen:** `B-V02` (lesbarer) Vektorisierte Zellzuordnung statt zeilenweisem R-Loop; gemessen auf den Beispieldaten nicht schneller (Median 2,3 ms statt 1,6 ms, 5,6 MB statt 1,6 MB, `ergebnisse/benchmarks.csv`), der Gewinn ist nur die Lesbarkeit; Code: `verbesserungen/B-V02.R`, Benchmark: `bench/B-V02.R`.
 - **Hinweise:** Die Funktion unterstellt ein quadratisches Dreieck und dass Zeilen- und Spaltenjahre übereinstimmen.
 
 ### `dev_year2cal_year()` — `R/basic.R:412-422`
@@ -183,8 +183,8 @@ Die beiden Dateien enthalten die Datenaufbereitung für die stochastische Einzel
 | ID | Funktion | Art | Schwere/Ziel | Kurzbeschreibung | Beleg |
 |---|---|---|---|---|---|
 | B-F01 | `expand_historic_indices()` | Fehler | hoch | Indexwerte werden positionsbasiert statt nach `Calendar_year` zugeordnet; Lücken erzeugen einen kryptischen Fehler | `befunde/test-B-F01.R` |
-| B-F02 | `add_transition_factor()` | Fehler | mittel | Fehlendes `index_year` führt zu `numeric(0)`-Nenner und unklarem Abbruch statt Validierung | `befunde/test-B-F02.R` |
+| B-F02 | `add_transition_factor()` | Fehler | niedrig | Fehlendes `index_year` führt zu `numeric(0)`-Nenner und unklarem Abbruch statt Validierung | `befunde/test-B-F02.R` |
 | B-F03 | `inc2cum()` | Fehler | mittel | Leere Matrix stürzt durch `for (i in 1:0)` ab | `befunde/test-B-F03.R` |
 | B-F04 | `cum2inc()` | Fehler | niedrig | Leerer Vektor liefert `NA` statt `numeric(0)` | `befunde/test-B-F04.R` |
 | B-V01 | `tail_factor()` | Verbesserung | kürzer/lesbarer | Direkte Paperformel ohne doppeltes `pmin` | `verbesserungen/B-V01.R`, `tests/verbesserungen/test-B-V01.R` |
-| B-V02 | `cal_year2dev_year()` | Verbesserung | effizienter | Vektorisierte Dreiecksumwandlung statt Zeilen-Loop | `verbesserungen/B-V02.R`, `tests/verbesserungen/test-B-V02.R`, `bench/B-V02.R` |
+| B-V02 | `cal_year2dev_year()` | Verbesserung | lesbarer | Vektorisierte Dreiecksumwandlung statt Zeilen-Loop | `verbesserungen/B-V02.R`, `tests/verbesserungen/test-B-V02.R`, `bench/B-V02.R` |

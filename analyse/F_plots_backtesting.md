@@ -67,10 +67,10 @@ Dateien: `R/plots.R` (2120 Zeilen) · Funktionen: 9
 ### `backtesting_1y_single_per_dev_year()` — `R/plots.R:1667-1871`
 - **Zweck:** Zoom auf einzelne Schäden einer Reserveklasse: erwartete Zahlungen und Quantile je Abwicklungsjahr, darüber die tatsächlichen Einzelzahlungen.
 - **Paperbezug:** Cashflow-Backtesting S. 22, dort aggregiert; Einzelschaden-Zoom ist eine Erweiterung · Erweiterung · Die Funktion nutzt als einzige der drei 1-Jahres-Funktionen `Cl_payment_cal` (Z. 1788, 1803) und vergleicht damit nominal mit nominal.
-- **Fehler:** `F-F02` (mittel) Die Legende der Quantilsbänder ist um zwei Bänder verschoben: `Q75` ist das breite 25 %-75 %-Band, wird aber als „1% - 99% Quantil“ beschriftet; `Q99` (90 %-99 %) erhält „25% - 75% Quantil“ (Z. 1819-1826). Beleg: `befunde/test-F-F02.R`; Korrektur: `verbesserungen/F-F02.R`.
+- **Fehler:** `F-F02` (mittel) Die Beschriftungen von `Q75` und `Q99` sind vertauscht (`Q90` ist richtig): `Q75` ist das breite 25 %-75 %-Band, wird aber als „1% - 99% Quantil“ beschriftet; `Q99` (90 %-99 %) erhält „25% - 75% Quantil“ (Z. 1819-1826). Beleg: `befunde/test-F-F02.R`; Korrektur: `verbesserungen/F-F02.R`.
 - **Verdacht (unbelegt):** `label` wird nicht validiert; jeder andere Wert als `"Claim_id"`/`"Origin_year"` wird als Spaltenname interpretiert und führt erst beim Plotbau zum Fehler.
 - **Verbesserungen:** keine umgesetzt; die Funktion wiederholt den Quantils-/`tibble`-Aufbau der beiden anderen 1-Jahres-Funktionen.
-- **Hinweise:** Das Roxygen-Beispiel verwendet `dev_year = 2:16` (Z. 1661), die Funktion heißt aber `dev_years` (Z. 1670); das Beispiel ist nicht lauffähig (siehe `F-H04`).
+- **Hinweise:** Das Roxygen-Beispiel verwendet `dev_year = 2:16` (Z. 1661), die Funktion heißt aber `dev_years` (Z. 1670); das Beispiel läuft trotzdem, weil R `dev_year` eindeutig als Präfix von `dev_years` zuordnet; die uneinheitliche Benennung ist nur ein Stilhinweis (siehe `F-H04`).
 
 ### `backtesting_multiyears()` — `R/plots.R:1958-2120`
 - **Zweck:** Kumulierte erwartete und tatsächliche Zahlungen über mehrere Folgejahre für gewählte Reserveklassen und Abwicklungsjahre.
@@ -78,7 +78,7 @@ Dateien: `R/plots.R` (2120 Zeilen) · Funktionen: 9
 - **Fehler:** `F-F03` (mittel) Bei `n_years < 1` (kein Kalenderjahr nach dem Reservierungsjahr) läuft `for (year in 1:n_years)` als `1:0` zweimal (Z. 1983, 1988), und `Year` wird zu `c(reserving_year + 1, reserving_year)` (Z. 2005); die Grafik zeigt ein erfundenes Jahr, ohne zu warnen. Beleg: `befunde/test-F-F03.R`; Korrektur: `verbesserungen/F-F03.R`.
 - **Verdacht (unbelegt):** `n_years <- max(Calendar_year) - reserving_year` (Z. 1983) unterstellt lückenlose Kalenderjahre; fehlende Jahre verzerren die kumulierten Fenster.
 - **Verbesserungen:** keine umgesetzt; die Funktion ist die kürzeste der Backtesting-Funktionen, dupliziert aber Farben, Theme und Achsenformatierung.
-- **Hinweise:** Das Roxygen-Beispiel verwendet `dev_year = 2:16` (Z. 1952), die Funktion `dev_years` (Z. 1961); auch das Vignettenbeispiel (Z. 1106) ist damit nicht lauffähig (`F-H04`).
+- **Hinweise:** Das Roxygen-Beispiel verwendet `dev_year = 2:16` (Z. 1952), die Funktion `dev_years` (Z. 1961); auch das Vignettenbeispiel (Z. 1106) nutzt die Kurzform; lauffähig ist es über partielle Argumentzuordnung, aber nicht robust (`F-H04`).
 
 ### Nicht implementiert: Ultimate-Backtesting — S. 22, 43, 49
 - **Paperbezug:** fehlt · Das Papier definiert das Ultimate-Backtesting als \((Ultimate_t-Ultimate_{t-1})/BE_{t-1}\) mit Benchmark 9 % (KH-Bestände) bzw. 10 % (Feuer, Sach), S. 22, 43, 49. In `R/plots.R` und im übrigen Paket gibt es keine Funktion, die diese Kennzahl berechnet oder grafisch gegen die Benchmark stellt; `backtesting_multiyears()` ist kumuliertes Cashflow-Backtesting und keine Umsetzung davon.
@@ -93,9 +93,9 @@ Dateien: `R/plots.R` (2120 Zeilen) · Funktionen: 9
 | F-F03 | `backtesting_multiyears()` | Fehler | mittel | Bei fehlendem Folgejahr (`n_years = 0`) läuft `1:0`, und die Grafik zeigt ein zusätzliches, erfundenes Jahr. | `befunde/test-F-F03.R`, `verbesserungen/F-F03.R` |
 | F-V01 | `plot_pools_overview()` | Verbesserung | effizienter | Vektorieller Aufbau von `df_pool_sizes` statt verschachtelter `rbind`-Schleife; gleiche vier Grafiken. | `tests/verbesserungen/test-F-V01.R`, `bench/F-V01.R` |
 | F-V02 | `plot_reserve_vs_be()` | Verbesserung | kürzer/lesbarer | Gemeinsame Hilfsfunktion für die beiden nahezu identischen Balkendiagramme; gleiche Grafiken. | `tests/verbesserungen/test-F-V02.R` |
-| F-H01 | — | fehlt | hoch | Ultimate-Backtesting nach S. 22, 43, 49 ist nicht implementiert. | — |
+| F-H01 | — | Hinweis (fehlt im Paket) | mittel | Ultimate-Backtesting nach S. 22, 43, 49 ist nicht implementiert. | — |
 | F-H02 | `R/plots.R` | Hinweis | Codequalität | 613/2120 Zeilen Roxygen; 591 von 1372 Codezeilen (43,1 %) wiederholen sich in anderen Funktionen; die beiden 1-Jahres-Funktionen sind zu 89 % identisch; Beispiel-Pipeline neunmal kopiert. | siehe Text |
 | F-H03 | `plot_pools_overview()` | Hinweis | niedrig | Reserveklasse 0 fehlt in `plot_obs_numbers` und `plot_stack`; Absicht nicht dokumentiert. | Z. 731-738, 780-783 |
-| F-H04 | `backtesting_1y_single_per_dev_year()`, `backtesting_multiyears()` | Hinweis | niedrig | Roxygen-/Vignettenbeispiele nutzen `dev_year` statt `dev_years` und sind nicht lauffähig. | Z. 1661, 1952; `vignettes/sicr.Rmd:1106` |
+| F-H04 | `backtesting_1y_single_per_dev_year()`, `backtesting_multiyears()` | Hinweis | niedrig | Beispiele nutzen `dev_year` statt `dev_years`; läuft nur über partielle Argumentzuordnung (Stil) | Z. 1661, 1952; `vignettes/sicr.Rmd:1106` |
 | F-H05 | `sicr_series()` | Hinweis | niedrig | Erste Fortschrittszeile zeigt „NaN“ (`realisation - 1`); `n < 1` wird nicht abgefangen. | Z. 1080, 1115-1123 |
 | F-H06 | `plot_reserve_vs_be_per_claim()` | Hinweis | niedrig | `max()` auf leeren Vorlauf-/Nachlaufgruppen ergibt `-Inf`; nominale `Cl_reserve` werden mit indexierten Klassengrenzen verglichen. | Z. 466-467, 488-491 |
