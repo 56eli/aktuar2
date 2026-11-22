@@ -7,7 +7,8 @@ Skowasch (Version 1.1.1, Commit `c0ad2ad`) auf drei Fragen:
    [„Stochastische Einzelschadenreservierung“ (04.02.2025)](https://aktuar.de/content/PDF/Fachwissen/2025-02-04_DAV_SV_EB_Stochastische_Einzelschadenreservierung.pdf)?
 2. **Fehler:** Wo rechnet der Code falsch? Jeder Fehler ist durch einen testthat-Test belegt.
 3. **Verbesserungen:** Wie wird der Code kürzer, lesbarer, eleganter oder schneller? Zu jedem Vorschlag gibt es
-   lauffähigen Code, einen Gleichheitstest und bei Effizienzvorschlägen einen Benchmark.
+   lauffähigen Code, einen Gleichheitstest und bei Effizienzvorschlägen einen Benchmark. Der Gleichheitstest
+   zeigt nur, dass das Ergebnis gleich bleibt; den Nutzen belegt der Benchmark.
 
 Die gesamte wissenschaftliche Arbeit ist in R gerechnet.
 

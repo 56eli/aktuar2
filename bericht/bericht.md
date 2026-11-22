@@ -275,6 +275,9 @@ nur ein Merkmal abfragt und das Ergebnis schönen würde.
   Mehrere Korrekturen derselben Funktion (z. B. drei Fassungen von
   `indices_ok_v()` in E-F04, E-F05 und E-V01) zeigen jeweils nur ihren
   eigenen Punkt.
+- Die Gleichheitstests der Verbesserungen zeigen nur, dass das Ergebnis
+  gleich bleibt. Den Nutzen belegen bei Effizienzvorschlägen die
+  Benchmarks; bei Lesbarkeitsvorschlägen ist er eine Wertung.
 - Das Paper liegt aus urheberrechtlichen Gründen nicht im Repo. Zitiert
   wird nur mit Seitenzahl.
 
