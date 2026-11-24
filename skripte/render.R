@@ -1,8 +1,8 @@
 #!/usr/bin/env Rscript
-# Rendert Bericht und Präsentation aus der Repo-Wurzel.
+# Rendert Bericht und Methoden-Artefakt aus der Repo-Wurzel.
 #   Rscript skripte/render.R
 # Der Bericht behält sein github_document-Format (bericht/bericht.md);
-# die Präsentation wird als selbstenthaltene HTML-Datei geschrieben.
+# das Artefakt wird als selbstenthaltene HTML-Datei geschrieben.
 
 root <- normalizePath(".", mustWork = TRUE)
 Sys.setenv(AKTUAR_ROOT = root)
@@ -24,12 +24,19 @@ render_datei <- function(rel, ausgabe) {
 }
 
 render_datei(file.path("bericht", "bericht.Rmd"), "bericht.md")
-render_datei(file.path("praesentation", "praesentation.Rmd"), "praesentation.html")
+render_datei(file.path("artefakt", "sicr_methode.Rmd"), "sicr_methode.html")
 
-# ioslides laedt MathJax immer von mathjax.rstudio.com nach, auch ohne Formeln. Die Folien
-# enthalten keine Formeln; der Lader wird entfernt, damit die HTML-Datei ohne Netz auskommt.
-html_pfad <- file.path("praesentation", "praesentation.html")
+# Das Artefakt muss ohne Netz auskommen: keine externen Skripte, Stile, Schriften
+# oder Bilder und kein MathJax-Lader.
+html_pfad <- file.path("artefakt", "sicr_methode.html")
 html <- paste(readLines(html_pfad, warn = FALSE, encoding = "UTF-8"), collapse = "\n")
-html <- sub("(?s)<!-- dynamically load mathjax[^\n]*\n<script>.*?</script>\n", "", html, perl = TRUE)
-if (grepl("mathjax.rstudio.com", html, fixed = TRUE)) stop("MathJax-Lader nicht entfernt")
-writeLines(html, html_pfad, useBytes = TRUE)
+link_tags <- regmatches(html, gregexpr("<link[^>]*>", html,
+                                       ignore.case = TRUE, perl = TRUE))[[1]]
+extern <- grepl('src="http', html, fixed = TRUE) ||
+   any(grepl('href="http', link_tags, fixed = TRUE)) ||
+   grepl("@import", html, fixed = TRUE) ||
+   grepl("url(http", html, fixed = TRUE) ||
+   grepl("mathjax", html, ignore.case = TRUE)
+if (extern) {
+   stop("sicr_methode.html lädt externe Ressourcen oder MathJax", call. = FALSE)
+}

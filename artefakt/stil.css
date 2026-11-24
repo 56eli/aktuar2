@@ -1,0 +1,362 @@
+/* Selbstenthaltenes Layout für den Methoden-Artefakt. Keine externen Ressourcen. */
+html {
+  margin: 0;
+  padding: 0;
+  background: #F6F4EE;
+  scroll-behavior: smooth;
+  scroll-snap-type: y proximity;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background: #F6F4EE;
+  color: #14213D;
+  font-family: system-ui, "Segoe UI", Helvetica, Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.45;
+}
+
+/* Der Dokumenttitel steht nur im Browser-Tab; die Titelfolie ist eine eigene Section. */
+.title,
+.subtitle,
+.author,
+.date,
+h1.title {
+  display: none;
+}
+
+.container-fluid,
+.main-container {
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  padding: 0;
+}
+
+.section.level2,
+.section {
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 100vh;
+  margin: 0;
+  padding: 7vh 6vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  background: #F6F4EE;
+  scroll-snap-align: start;
+}
+
+.section.level2 > *,
+.section > * {
+  width: 100%;
+  max-width: 1100px;
+}
+
+.section.level2 > .kicker,
+.section > .kicker {
+  order: -2;
+}
+
+.section.level2 > h2,
+.section > h2 {
+  order: -1;
+}
+
+h1,
+h2,
+h3 {
+  font-family: Georgia, "Source Serif Pro", serif;
+  font-weight: 700;
+  color: #14213D;
+}
+
+h2 {
+  margin: 0 0 0.55em 0;
+  font-size: clamp(2rem, 4.2vw, 3.4rem);
+  line-height: 1.08;
+  letter-spacing: -0.015em;
+}
+
+h3 {
+  margin: 0 0 0.45em 0;
+  font-size: 1.18rem;
+  line-height: 1.25;
+}
+
+p {
+  margin: 0 0 0.8em 0;
+}
+
+ul,
+ol {
+  margin: 0.3em 0 0 0;
+  padding-left: 1.3em;
+}
+
+li {
+  margin: 0 0 0.55em 0;
+}
+
+code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.88em;
+  background: #ECE8DC;
+  color: #14213D;
+  padding: 0.08em 0.3em;
+  border-radius: 2px;
+}
+
+.kicker {
+  margin: 0 0 0.85em 0;
+  color: #B8562B;
+  font-size: 0.77rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.lead {
+  max-width: 920px;
+  color: #F6F4EE;
+  font-family: Georgia, "Source Serif Pro", serif;
+  font-size: clamp(1.2rem, 2vw, 1.55rem);
+  line-height: 1.35;
+}
+
+.lead-sub {
+  max-width: 860px;
+  color: #C9D2E0;
+  font-size: 1.03rem;
+}
+
+.note {
+  color: #525F76;
+  font-size: 0.95rem;
+}
+
+.codeline {
+  margin-top: 1.3em;
+  color: #8A93A3;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.78rem;
+  letter-spacing: 0.01em;
+}
+
+.footer {
+  margin-top: 1.1em;
+  color: #525F76;
+  font-size: 0.82rem;
+  letter-spacing: 0.04em;
+}
+
+.cards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  width: 100%;
+  margin: 1.3em 0 1em 0;
+}
+
+.card {
+  box-sizing: border-box;
+  flex: 1 1 155px;
+  min-height: 112px;
+  padding: 1rem 1.05rem 1.1rem 1.05rem;
+  background: #FEFCF7;
+  border-top: 3px solid #3B6E8F;
+}
+
+.card.akzent {
+  border-top-color: #B8562B;
+}
+
+.card .zahl {
+  color: #14213D;
+  font-family: Georgia, "Source Serif Pro", serif;
+  font-size: clamp(2rem, 4vw, 3.15rem);
+  line-height: 1;
+}
+
+.card .cap {
+  margin-top: 0.5em;
+  color: #525F76;
+  font-size: 0.88rem;
+  line-height: 1.35;
+}
+
+.cards.three .card {
+  flex-basis: 240px;
+}
+
+.two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  width: 100%;
+  margin-top: 0.4em;
+}
+
+.col {
+  padding-top: 0.75em;
+  border-top: 2px solid #E4E0D6;
+}
+
+.empfehlungen li {
+  max-width: 1000px;
+}
+
+.grenzen li {
+  max-width: 1000px;
+}
+
+/* Dämmerungsvariante für Titelfolie und D.9 */
+.section.dark,
+.section.level2.dark {
+  background: #14213D;
+  color: #F6F4EE;
+}
+
+.section.dark h2,
+.section.dark h3,
+.section.level2.dark h2,
+.section.level2.dark h3 {
+  color: #F6F4EE;
+}
+
+.section.dark p,
+.section.dark li,
+.section.level2.dark p,
+.section.level2.dark li {
+  color: #E6E9F0;
+}
+
+.section.dark .kicker,
+.section.level2.dark .kicker {
+  color: #E3A27F;
+}
+
+.section.dark .note,
+.section.dark .codeline,
+.section.dark .footer,
+.section.level2.dark .note,
+.section.level2.dark .codeline,
+.section.level2.dark .footer {
+  color: #AEB8C9;
+}
+
+.section.dark code,
+.section.level2.dark code {
+  background: rgba(255, 255, 255, 0.1);
+  color: #F6F4EE;
+}
+
+.section.dark .col,
+.section.level2.dark .col {
+  border-top-color: #45536E;
+}
+
+.section.dark .card,
+.section.level2.dark .card {
+  background: #1D2D4F;
+  border-top-color: #E3A27F;
+}
+
+.section.dark .card .zahl,
+.section.level2.dark .card .zahl {
+  color: #F6F4EE;
+}
+
+.section.dark .card .cap,
+.section.level2.dark .card .cap {
+  color: #C9D2E0;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin: 0 auto;
+}
+
+.figure {
+  width: 100% !important;
+  margin: 0.2em 0 0.6em 0;
+}
+
+.figure img {
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
+.slide-counter {
+  position: fixed;
+  right: 1.1rem;
+  bottom: 0.8rem;
+  z-index: 50;
+  padding: 0.15rem 0.45rem;
+  color: #525F76;
+  background: rgba(254, 252, 247, 0.92);
+  border: 1px solid #E4E0D6;
+  border-radius: 2px;
+  font-size: 0.72rem;
+  letter-spacing: 0.05em;
+}
+
+@media (max-width: 760px) {
+  .section.level2,
+  .section {
+    padding: 6vh 5vw;
+  }
+
+  .two-col {
+    grid-template-columns: 1fr;
+    gap: 1.1rem;
+  }
+
+  .cards {
+    gap: 0.65rem;
+  }
+
+  .card {
+    flex-basis: 140px;
+  }
+}
+
+/* Fallback, falls die Kopfattribute am h2 statt am Section-Div landen. */
+.section:has(> h2.dark) {
+  background: #14213D;
+  color: #F6F4EE;
+}
+
+.section:has(> h2.dark) h2,
+.section:has(> h2.dark) h3 {
+  color: #F6F4EE;
+}
+
+.section:has(> h2.dark) p,
+.section:has(> h2.dark) li {
+  color: #E6E9F0;
+}
+
+.section:has(> h2.dark) .kicker {
+  color: #E3A27F;
+}
+
+.section:has(> h2.dark) .note,
+.section:has(> h2.dark) .codeline,
+.section:has(> h2.dark) .footer {
+  color: #AEB8C9;
+}
+
+.section:has(> h2.dark) code {
+  background: rgba(255, 255, 255, 0.1);
+  color: #F6F4EE;
+}
+
+.section:has(> h2.dark) .col {
+  border-top-color: #45536E;
+}
