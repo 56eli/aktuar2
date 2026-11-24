@@ -41,13 +41,13 @@ Geprüft wurden die Befunde und Verbesserungen aus `analyse/D_renten_basisschaed
 
 ## Erläuterungen
 
-### D-F01 – Umdeutung richtig, Korrektur und Test falsch
+### D-F01 – Umdeutung richtig, Korrektur und Test überarbeitet
 
 Die Zahlungsmatrix ist eindeutig: `cut_first = Calendar_year - Entering_year + 1` und `tail(payments, -cut_first)` (`annuity_functions.R:57,78`) sorgen dafür, dass Spalte 1 die Zahlung des Jahres `Calendar_year + 1` enthält. Die erste Spalte der Sterbewahrscheinlichkeiten ist 0 (`:162,172`), also wird diese erste Zahlung mit Überlebenswahrscheinlichkeit 1 bewertet. Das ist bei vorschüssiger Zahlung zu Beginn von `Calendar_year + 1` richtig; die ursprüngliche Behauptung „erste Zahlung mit S(1)“ ist damit widerlegt.
 
 Der verbleibende Versatz liegt im Alter. `age <- Calendar_year - Birth_year` (`:172`) ist das Alter des laufenden Jahres, während die erste Zahlung erst im Folgejahr fällig ist. Dass das Paket das Alter auf das Zahlungsjahr bezieht, zeigt der Pool-Pfad: dort ist Spalte 1 das Eintrittsjahr (`:61`), und für dieses Jahr wird `Calendar_year - Birth_year` verwendet. Bei bekannten Renten ist die erste Zahlungsspalte dagegen ein Jahr später, das Alter aber dasselbe. Also wird für die Jahre `Calendar_year + 1, +2, ...` jeweils q des Vorjahres verwendet; bei steigender Sterblichkeit sind die Überlebenswahrscheinlichkeiten und damit alle Zahlungen nach der ersten zu hoch. Die Umdeutung „q(x) statt q(x+1)“ ist unter dieser im Paket selbst verwendeten Konvention korrekt.
 
-`verbesserungen/D-F01.R` setzt die Umdeutung nicht um: `cbind(probs[, -1], 1)` verschiebt die Wahrscheinlichkeiten um eine Spalte und bewertet dadurch die erste Zahlung mit S(1) und alle weiteren mit einem zusätzlichen Überlebensfaktor. `befunde/test-D-F01.R` ist für den Altersversatz blind, weil die konstruierte Sterbetafel ab Alter 50 die Wahrscheinlichkeit 1 hat, also q(50) = q(51) = 1; der Test kann den Unterschied zwischen q(x) und q(x+1) gar nicht sehen. Seine Erwartung, die erste Zahlung müsse 0 sein, ist falsch. Ein belastbarer Test müsste q(50) = 0 und q(51) = 1 setzen und dann prüfen, dass die Zahlung 2024 = 1000 und die Zahlung 2025 = 0 ist.
+Die erste Fassung von `verbesserungen/D-F01.R` (`cbind(probs[, -1], 1)`) und ihr Test (q(50) = q(51) = 1) setzten die Umdeutung nicht um; beide sind ersetzt. Die Korrektur erhöht jetzt das Bewertungsjahr um eins (`verbesserungen/D-F01.R:13`) und trifft damit q(x+1); der Test setzt q(50) = 1 und q(51) = 0 und prüft, dass die Zahlung 2024 und die Zahlung 2025 je 1000 sind (`befunde/test-D-F01.R:17,33-41`). sicr 1.1.1 liefert für 2025 0, die Korrektur 1000.
 
 Einschränkung: Fasst man das Alter als „Alter am Bewertungsstichtag“ (letzter Geburtstag) auf, sind die ursprünglichen Wahrscheinlichkeiten richtig und die Umdeutung wäre falsch. Die Entscheidung hängt also an der Alterskonvention; die Inkonsistenz zwischen bekanntem und Pool-Pfad spricht für die hier bestätigte Variante.
 

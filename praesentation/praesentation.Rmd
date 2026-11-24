@@ -115,8 +115,8 @@ grafik_runden(wurzel)
 
 ```sh
 docker build -t aktuar-r:1 docker
-docker run --rm -v "$PWD":/work -w /work aktuar-r:1 Rscript skripte/tests_ausfuehren.R
-docker run --rm -v "$PWD":/work -w /work aktuar-r:1 Rscript skripte/render.R
+docker run --rm -u "$(id -u):$(id -g)" -e HOME=/tmp -v "$PWD":/work -w /work aktuar-r:1 Rscript skripte/tests_ausfuehren.R
+docker run --rm -u "$(id -u):$(id -g)" -e HOME=/tmp -v "$PWD":/work -w /work aktuar-r:1 Rscript skripte/render.R
 ```
 
 Runde 3: siehe `nachpruefung/README.md` (wirkung.R, both_ways_stichprobe.R,

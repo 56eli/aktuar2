@@ -3,7 +3,7 @@
 #   Rscript nachpruefung/skripte/both_ways_auswerten.R
 # Eingabe:  gegenpruefung/both_ways_roh.csv
 # Ausgabe:  nachpruefung/ergebnisse/both_ways_r.csv
-# Die Ausgabe soll mit gegenpruefung/both_ways.csv byte-gleich sein.
+# Die Ausgabe soll mit gegenpruefung/both_ways.csv inhaltlich gleich sein (Python schreibt CRLF, R LF).
 
 root <- Sys.getenv("AKTUAR_ROOT", ".")
 setwd(root)

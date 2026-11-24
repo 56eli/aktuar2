@@ -156,10 +156,14 @@ run_test <- function(path) {
                                         stop_on_failure = FALSE)),
       error = function(e) data.frame(failed = 1L, error = 1L)
    )
-   if (!NROW(r)) return(list(gruen = FALSE, text = "keine Testergebnisse"))
+   # "rot" heisst: eine Erwartung schlaegt an, ohne Abbruch. Ein Abbruch (error > 0 oder
+   # keine Ergebnisse) ist "fehler" und zaehlt nie als erkannter Mutant.
+   if (!NROW(r)) return(list(gruen = FALSE, status = "fehler", f = NA, e = NA,
+                             text = "keine Testergebnisse"))
    f <- sum(r$failed, na.rm = TRUE)
    e <- sum(r$error, na.rm = TRUE)
-   list(gruen = (f == 0 && e == 0),
+   status <- if (e > 0) "fehler" else if (f > 0) "rot" else "gruen"
+   list(gruen = (status == "gruen"), status = status, f = f, e = e,
         text = paste0(f, " failed, ", e, " error"))
 }
 
@@ -209,7 +213,7 @@ for (i in seq_len(NROW(cfg))) {
          writeLines(c(info$prefix, readLines(test_datei, warn = FALSE)), datei)
       }
       r <- run_test(datei)
-      ergebnis <- if (r$gruen) "gruen" else "rot"
+      ergebnis <- r$status
       ok <- if (ergebnis == info$erwartet) "ja" else "nein"
       cat("  ", lauf, ": ", ergebnis, " (", r$text, "), erwartet ",
           info$erwartet, " -> ", ok, "\n", sep = "")
@@ -220,6 +224,8 @@ for (i in seq_len(NROW(cfg))) {
          Ergebnis = ergebnis,
          erwartet = info$erwartet,
          ok = ok,
+         failed = r$f,
+         error = r$e,
          stringsAsFactors = FALSE
       )
    }

@@ -1,31 +1,31 @@
-ID,Lauf,Mutation,Ergebnis,erwartet,ok
-A-F01,original,,gruen,gruen,ja
-A-F01,korrektur,,rot,rot,ja
-A-F01,mutant,Nachlaufzahlungen um 1 verschoben,rot,rot,ja
-B-F01,original,,gruen,gruen,ja
-B-F01,korrektur,,rot,rot,ja
-B-F01,mutant,historische Indizes zusaetzlich umgedreht,rot,rot,ja
-C-F03,original,,gruen,gruen,ja
-C-F03,korrektur,,rot,rot,ja
-C-F03,mutant,erste und letzte Exposure-Zeile vertauscht,rot,rot,ja
-C-F05,original,,gruen,gruen,ja
-C-F05,korrektur,,rot,rot,ja
-C-F05,mutant,letztes Abwicklungsjahr des IBNR-Modells entfernt,rot,rot,ja
-D-F01,original,,gruen,gruen,ja
-D-F01,korrektur,,rot,rot,ja
-D-F01,mutant,technisches Alter um zwei Jahre zu hoch,rot,rot,ja
-D-F03,original,,gruen,gruen,ja
-D-F03,korrektur,,rot,rot,ja
-D-F03,mutant,Quoten spaltenweise gedreht,rot,rot,ja
-D-F07,original,,gruen,gruen,ja
-D-F07,korrektur,,rot,rot,ja
-D-F07,mutant,letzte Zukunftsspalte um 1 erhoeht,rot,rot,ja
-E-F01,original,,gruen,gruen,ja
-E-F01,korrektur,,rot,rot,ja
-E-F01,mutant,alle XL-Zahlungen um 1 erhoeht,rot,rot,ja
-E-F02,original,,gruen,gruen,ja
-E-F02,korrektur,,rot,rot,ja
-E-F02,mutant,Quoten spaltenweise gedreht,rot,rot,ja
-F-F01,original,,gruen,gruen,ja
-F-F01,korrektur,,rot,rot,ja
-F-F01,mutant,Ist-Werte im Backtesting verdoppelt,rot,rot,ja
+ID,Lauf,Mutation,Ergebnis,erwartet,ok,failed,error
+A-F01,original,,gruen,gruen,ja,0,0
+A-F01,korrektur,,rot,rot,ja,1,0
+A-F01,mutant,Nachlaufzahlungen um 1 verschoben,rot,rot,ja,2,0
+B-F01,original,,gruen,gruen,ja,0,0
+B-F01,korrektur,,rot,rot,ja,3,0
+B-F01,mutant,historische Indizes zusaetzlich umgedreht,rot,rot,ja,2,0
+C-F03,original,,gruen,gruen,ja,0,0
+C-F03,korrektur,,rot,rot,ja,2,0
+C-F03,mutant,erste und letzte Exposure-Zeile vertauscht,rot,rot,ja,3,0
+C-F05,original,,gruen,gruen,ja,0,0
+C-F05,korrektur,,rot,rot,ja,2,0
+C-F05,mutant,letztes Abwicklungsjahr des IBNR-Modells entfernt,rot,rot,ja,1,0
+D-F01,original,,gruen,gruen,ja,0,0
+D-F01,korrektur,,rot,rot,ja,2,0
+D-F01,mutant,technisches Alter um zwei Jahre zu hoch,rot,rot,ja,2,0
+D-F03,original,,gruen,gruen,ja,0,0
+D-F03,korrektur,,rot,rot,ja,2,0
+D-F03,mutant,Quoten spaltenweise gedreht,rot,rot,ja,2,0
+D-F07,original,,gruen,gruen,ja,0,0
+D-F07,korrektur,,rot,rot,ja,1,0
+D-F07,mutant,letzte Zukunftsspalte um 1 erhoeht,rot,rot,ja,1,0
+E-F01,original,,gruen,gruen,ja,0,0
+E-F01,korrektur,,rot,rot,ja,2,0
+E-F01,mutant,alle XL-Zahlungen um 1 erhoeht,rot,rot,ja,3,0
+E-F02,original,,gruen,gruen,ja,0,0
+E-F02,korrektur,,rot,rot,ja,2,0
+E-F02,mutant,Quoten spaltenweise gedreht,rot,rot,ja,4,0
+F-F01,original,,gruen,gruen,ja,0,0
+F-F01,korrektur,,rot,rot,ja,2,0
+F-F01,mutant,Ist-Werte im Backtesting verdoppelt,rot,rot,ja,2,0

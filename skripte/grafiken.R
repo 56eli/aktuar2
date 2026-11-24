@@ -308,15 +308,15 @@ grafik_testmatrix <- function(root = Sys.getenv("AKTUAR_ROOT", ".")) {
          lauf <- sub("^R3 ", "", sp)
          z <- r3[r3$ID == id & r3$Lauf == tolower(lauf), , drop = FALSE]
          if (nrow(z)) {
-            d$status[i] <- ifelse(z$Ergebnis[1] == "gruen", "grün", "rot")
+            d$status[i] <- c(gruen = "grün", rot = "rot", fehler = "Abbruch")[[z$Ergebnis[1]]]
          }
       } else {
          z <- vm[vm$ID == id, , drop = FALSE]
          if (nrow(z)) {
             d$status[i] <- switch(
                sp,
-               "V Original" = ifelse(z$Test_original[1] == "gruen", "grün", "rot"),
-               "V Mutant" = ifelse(z$Test_mutant[1] == "rot", "rot", "grün")
+               "V Original" = c(gruen = "grün", rot = "rot", fehler = "Abbruch")[[z$Test_original[1]]],
+               "V Mutant" = c(gruen = "grün", rot = "rot", fehler = "Abbruch")[[z$Test_mutant[1]]]
             )
          }
       }
@@ -326,7 +326,7 @@ grafik_testmatrix <- function(root = Sys.getenv("AKTUAR_ROOT", ".")) {
    d$bewertung <- factor(ifelse(d$status == "keine Daten", "nicht geprüft",
                                 ifelse(d$status == erwartet, "wie erwartet", "nicht wie erwartet")),
                          c("wie erwartet", "nicht wie erwartet", "nicht geprüft"))
-   d$text <- ifelse(d$status == "grün", "besteht", ifelse(d$status == "rot", "schlägt an", ""))
+   d$text <- ifelse(d$status == "grün", "besteht", ifelse(d$status == "rot", "schlägt an", ifelse(d$status == "Abbruch", "Abbruch", "")))
    d$id <- factor(d$id, levels = rev(ids))
    d$spalte <- factor(d$spalte, levels = spalten,
                       labels = sub(" ", "\n", spalten))

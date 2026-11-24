@@ -149,10 +149,14 @@ run_test <- function(path) {
                                         stop_on_failure = FALSE)),
       error = function(e) data.frame(failed = 1L, error = 1L)
    )
-   if (!NROW(r)) return(list(gruen = FALSE, text = "keine Testergebnisse"))
+   # "rot" heisst: eine Erwartung schlaegt an, ohne Abbruch. Ein Abbruch (error > 0 oder
+   # keine Ergebnisse) ist "fehler" und zaehlt nie als erkannter Mutant.
+   if (!NROW(r)) return(list(gruen = FALSE, status = "fehler", f = NA, e = NA,
+                             text = "keine Testergebnisse"))
    f <- sum(r$failed, na.rm = TRUE)
    e <- sum(r$error, na.rm = TRUE)
-   list(gruen = (f == 0 && e == 0),
+   status <- if (e > 0) "fehler" else if (f > 0) "rot" else "gruen"
+   list(gruen = (status == "gruen"), status = status, f = f, e = e,
         text = paste0(f, " failed, ", e, " error"))
 }
 
@@ -192,9 +196,9 @@ for (i in seq_len(NROW(cfg))) {
    writeLines(c(prefix, readLines(test_datei, warn = FALSE)), test_mut)
    mut <- run_test(test_mut)
 
-   test_orig_txt <- if (orig$gruen) "gruen" else "rot"
-   test_mut_txt <- if (mut$gruen) "gruen" else "rot"
-   urteil <- if (orig$gruen && !mut$gruen) "diskriminiert" else "diskriminiert_nicht"
+   test_orig_txt <- orig$status
+   test_mut_txt <- mut$status
+   urteil <- if (orig$status == "gruen" && mut$status == "rot") "diskriminiert" else "diskriminiert_nicht"
    cat("  original:", test_orig_txt, "(", orig$text, ")  mutant:",
        test_mut_txt, "(", mut$text, ")\n")
    zeilen[[length(zeilen) + 1L]] <- data.frame(
@@ -203,6 +207,8 @@ for (i in seq_len(NROW(cfg))) {
       Test_original = test_orig_txt,
       Test_mutant = test_mut_txt,
       Urteil = urteil,
+      failed_mutant = mut$f,
+      error_mutant = mut$e,
       stringsAsFactors = FALSE
    )
 }

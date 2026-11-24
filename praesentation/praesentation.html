@@ -3429,8 +3429,8 @@ Quelle: gegenpruefung/upstream.md, nachpruefung/bericht.md</div>
 </article></slide><slide class=""><hgroup><h2>Reproduktion</h2></hgroup><article  id="reproduktion">
 
 <pre class = 'prettyprint lang-sh'>docker build -t aktuar-r:1 docker
-docker run --rm -v &quot;$PWD&quot;:/work -w /work aktuar-r:1 Rscript skripte/tests_ausfuehren.R
-docker run --rm -v &quot;$PWD&quot;:/work -w /work aktuar-r:1 Rscript skripte/render.R</pre>
+docker run --rm -u &quot;$(id -u):$(id -g)&quot; -e HOME=/tmp -v &quot;$PWD&quot;:/work -w /work aktuar-r:1 Rscript skripte/tests_ausfuehren.R
+docker run --rm -u &quot;$(id -u):$(id -g)&quot; -e HOME=/tmp -v &quot;$PWD&quot;:/work -w /work aktuar-r:1 Rscript skripte/render.R</pre>
 
 <p>Runde 3: siehe <code>nachpruefung/README.md</code> (wirkung.R, both_ways_stichprobe.R, mutanten_verbesserungen.R, benchmarks_spanne.R 5, f_f01_vignette.R).</p>
 
@@ -3442,15 +3442,6 @@ Quelle: README.md, nachpruefung/README.md</div></article></slide>
 
 </slides>
 
-<!-- dynamically load mathjax for compatibility with self-contained -->
-<script>
-  (function () {
-    var script = document.createElement("script");
-    script.type = "text/javascript";
-    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
-    document.getElementsByTagName("head")[0].appendChild(script);
-  })();
-</script>
 
 <!-- map slide visiblity events into shiny -->
 <script>

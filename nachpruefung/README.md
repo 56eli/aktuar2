@@ -7,12 +7,12 @@ schreiben ihre Ergebnisse nach `nachpruefung/ergebnisse/`. Der Bericht steht in
 
 | Skript | Docker-Aufruf | Ausgabe |
 |---|---|---|
-| `wirkung.R` | `docker run --rm -e HOME=/tmp -e AKTUAR_ROOT=/work -v <repo>:/work -v <sicr>:/sicr:ro -w /work aktuar-r:1 Rscript nachpruefung/skripte/wirkung.R` | `nachpruefung/ergebnisse/wirkung.csv` |
-| `mutanten_verbesserungen.R` | `docker run --rm -e HOME=/tmp -e AKTUAR_ROOT=/work -v <repo>:/work -v <sicr>:/sicr:ro -w /work aktuar-r:1 Rscript nachpruefung/skripte/mutanten_verbesserungen.R` | `nachpruefung/ergebnisse/mutanten_verbesserungen.csv` |
-| `both_ways_stichprobe.R` | `docker run --rm -e HOME=/tmp -e AKTUAR_ROOT=/work -v <repo>:/work -v <sicr>:/sicr:ro -w /work aktuar-r:1 Rscript nachpruefung/skripte/both_ways_stichprobe.R` | `nachpruefung/ergebnisse/both_ways_stichprobe.csv` |
-| `both_ways_auswerten.R` | `docker run --rm -e HOME=/tmp -e AKTUAR_ROOT=/work -v <repo>:/work -v <sicr>:/sicr:ro -w /work aktuar-r:1 Rscript nachpruefung/skripte/both_ways_auswerten.R` | `nachpruefung/ergebnisse/both_ways_r.csv` (zum `cmp` gegen `gegenpruefung/both_ways.csv`) |
-| `benchmarks_spanne.R` | `docker run --rm -e HOME=/tmp -e AKTUAR_ROOT=/work -v <repo>:/work -v <sicr>:/sicr:ro -w /work aktuar-r:1 Rscript nachpruefung/skripte/benchmarks_spanne.R 5` | `nachpruefung/ergebnisse/benchmarks_spanne.csv` und `benchmarks_spanne_zusammenfassung.csv` |
-| `f_f01_vignette.R` | `docker run --rm -e HOME=/tmp -e AKTUAR_ROOT=/work -v <repo>:/work -v <sicr>:/sicr:ro -w /work aktuar-r:1 Rscript nachpruefung/skripte/f_f01_vignette.R` | `nachpruefung/ergebnisse/f_f01_vignette.csv` |
+| `wirkung.R` | `docker run --rm -u "$(id -u):$(id -g)" -e HOME=/tmp -e AKTUAR_ROOT=/work -v <repo>:/work -v <sicr>:/sicr:ro -w /work aktuar-r:1 Rscript nachpruefung/skripte/wirkung.R` | `nachpruefung/ergebnisse/wirkung.csv` |
+| `mutanten_verbesserungen.R` | `docker run --rm -u "$(id -u):$(id -g)" -e HOME=/tmp -e AKTUAR_ROOT=/work -v <repo>:/work -v <sicr>:/sicr:ro -w /work aktuar-r:1 Rscript nachpruefung/skripte/mutanten_verbesserungen.R` | `nachpruefung/ergebnisse/mutanten_verbesserungen.csv` |
+| `both_ways_stichprobe.R` | `docker run --rm -u "$(id -u):$(id -g)" -e HOME=/tmp -e AKTUAR_ROOT=/work -v <repo>:/work -v <sicr>:/sicr:ro -w /work aktuar-r:1 Rscript nachpruefung/skripte/both_ways_stichprobe.R` | `nachpruefung/ergebnisse/both_ways_stichprobe.csv` |
+| `both_ways_auswerten.R` | `docker run --rm -u "$(id -u):$(id -g)" -e HOME=/tmp -e AKTUAR_ROOT=/work -v <repo>:/work -v <sicr>:/sicr:ro -w /work aktuar-r:1 Rscript nachpruefung/skripte/both_ways_auswerten.R` | `nachpruefung/ergebnisse/both_ways_r.csv` (zum `cmp` gegen `gegenpruefung/both_ways.csv`) |
+| `benchmarks_spanne.R` | `docker run --rm -u "$(id -u):$(id -g)" -e HOME=/tmp -e AKTUAR_ROOT=/work -v <repo>:/work -v <sicr>:/sicr:ro -w /work aktuar-r:1 Rscript nachpruefung/skripte/benchmarks_spanne.R 5` | `nachpruefung/ergebnisse/benchmarks_spanne.csv` und `benchmarks_spanne_zusammenfassung.csv` |
+| `f_f01_vignette.R` | `docker run --rm -u "$(id -u):$(id -g)" -e HOME=/tmp -e AKTUAR_ROOT=/work -v <repo>:/work -v <sicr>:/sicr:ro -w /work aktuar-r:1 Rscript nachpruefung/skripte/f_f01_vignette.R` | `nachpruefung/ergebnisse/f_f01_vignette.csv` |
 
 Hinweise: `wirkung.R` berechnet die Großschadenwirkung mit n = 1 und Seed 12345.
 Die drei Permutationstests in `wirkung.R` benutzen Seed 42. Von den 12

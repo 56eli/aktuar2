@@ -119,7 +119,7 @@ Paperbezug:
 | D.9.1 Rückversicherungsprogramm | AAD/AAL sind nicht umgesetzt (in sicr dokumentiert). Zusätzlich setzt die Indexklausel ein Jahr zu früh an (C-F04).      |
 | D.2.2 Großschadenschwelle G     | Optional: Der Bericht empfiehlt („sollte“, S. 11), G unter der kleinsten Priorität zu wählen; sicr prüft das nicht.      |
 | D.10.3 Ultimate-Backtesting     | Optional: Anwendung der UAG (Kap. 3, S. 22), keine Paketanforderung. Vorhanden ist nur das Cashflow-Backtesting (F-H01). |
-| D.11.4 Ergebnisdokumentation    | Kein Paperbezug: Das Paper enthält kein Wort „Dokumentation“; eine Ergebnissammlung je Bestand ist Anwenderpflicht.      |
+| D.11.4 Ergebnisdokumentation    | Kein Paperbezug: Das Paper enthält kein Wort „Dokumentation“; die Ergebnissammlung je Bestand regelt das Paper nicht.    |
 
 Kapitel 3 des Berichts (Anwendungsstudien) lässt sich mangels Daten
 nicht nachrechnen. Geprüft wurden dort nur die Definitionen, etwa die
@@ -242,14 +242,14 @@ fester Punktwert.
 
 ![](abbildungen/testmatrix-1.png)<!-- -->
 
-Die 76 `test_that`-Blöcke enthalten 200 `expect_`-Aufrufe: 62 in
-`befunde/` (Fehler- und Korrekturbelege; C-F05 vereint beide in einem
-Block) und 14 Gleichheitstests in `tests/verbesserungen/`; alle sind
-grün. Runde 2 hat alle 30 Fehler both-ways geprüft (Original grün,
-Korrektur rot, Mutant rot). Runde 3 wiederholte das mit eigenen Mutanten
-für eine Stichprobe von 10 Befunden (10/10 ok) und prüfte zusätzlich
-alle 12 Verbesserungen mit einem absichtlich falschen `_v()`-Mutanten
-(12/12 erkannt,
+Von den 76 `test_that`-Blöcken stehen 62 in `befunde/` (Fehler- und
+Korrekturbelege; C-F05 vereint beide in einem Block) und 14
+Gleichheitstests in `tests/verbesserungen/`; sie enthalten zusammen 200
+`expect_`-Aufrufe (144 + 56); alle sind grün. Runde 2 hat alle 30 Fehler
+both-ways geprüft (Original grün, Korrektur rot, Mutant rot). Runde 3
+wiederholte das mit eigenen Mutanten für eine Stichprobe von 10 Befunden
+(10/10 ok) und prüfte zusätzlich alle 12 Verbesserungen mit einem
+absichtlich falschen `_v()`-Mutanten (12/12 erkannt,
 [`mutanten_verbesserungen.csv`](../nachpruefung/ergebnisse/mutanten_verbesserungen.csv)).
 Damit ist auch die in Runde 2 offene Lücke geschlossen, dass die
 Gleichheitstests eine falsche `_v()` nicht erkennen könnten.

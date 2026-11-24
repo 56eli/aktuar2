@@ -24,7 +24,7 @@ Die gesamte wissenschaftliche Arbeit ist in R gerechnet.
 | Belegte Fehler | 30: 0 kritisch · 8 hoch · 17 mittel · 5 niedrig |
 | Wirkung | A-F01 −2,9 bis −5,0 % Poolmasse · D-F01 +1,86 % · D-F07 −10,6 % · E-F01 −7,04 % zediertes XL / +2,91 % netto (Prio 500.000, n = 1) · F-F01 +5,95 % im Vignettenfall |
 | Verbesserungen | 12: 6 gemessen schneller (1,7–2,0× bis 8,2–11,4×), 2 langsamer (nur Lesbarkeit), 4 ohne Benchmark |
-| Tests | 76 `test_that`-Blöcke mit 200 `expect_`-Aufrufen: 62 in `befunde/` (Fehler- und Korrekturbelege; C-F05 vereint beide in einem Block), 14 Gleichheitstests in `tests/verbesserungen/`; alle grün ([`ergebnisse/testergebnisse.csv`](ergebnisse/testergebnisse.csv)) |
+| Tests | 76 `test_that`-Blöcke: 62 in `befunde/` (Fehler- und Korrekturbelege; C-F05 vereint beide in einem Block), 14 Gleichheitstests in `tests/verbesserungen/`; zusammen 200 `expect_`-Aufrufe (144 + 56); alle grün ([`ergebnisse/testergebnisse.csv`](ergebnisse/testergebnisse.csv)) |
 
 Die wichtigsten Befunde:
 
@@ -79,20 +79,20 @@ Datenlagen · *mittel*: Randfall oder Absturz · *niedrig*: Stil, Doku.
 
 ```sh
 docker build -t aktuar-r:1 docker
-docker run --rm -v "$PWD":/work -w /work aktuar-r:1 Rscript skripte/tests_ausfuehren.R   # alle Tests
-docker run --rm -v "$PWD":/work -w /work aktuar-r:1 Rscript skripte/einzeltest.R befunde/test-E-F01.R
-docker run --rm -v "$PWD":/work -w /work aktuar-r:1 Rscript skripte/benchmarks.R
-docker run --rm -v "$PWD":/work -w /work aktuar-r:1 Rscript skripte/render.R              # Bericht und Präsentation
+docker run --rm -u "$(id -u):$(id -g)" -e HOME=/tmp -v "$PWD":/work -w /work aktuar-r:1 Rscript skripte/tests_ausfuehren.R   # alle Tests
+docker run --rm -u "$(id -u):$(id -g)" -e HOME=/tmp -v "$PWD":/work -w /work aktuar-r:1 Rscript skripte/einzeltest.R befunde/test-E-F01.R
+docker run --rm -u "$(id -u):$(id -g)" -e HOME=/tmp -v "$PWD":/work -w /work aktuar-r:1 Rscript skripte/benchmarks.R
+docker run --rm -u "$(id -u):$(id -g)" -e HOME=/tmp -v "$PWD":/work -w /work aktuar-r:1 Rscript skripte/render.R              # Bericht und Präsentation
 ```
 
 Runde 3 läuft aus der Repo-Wurzel; `<sicr>` ist ein Checkout von sicr an Commit `c0ad2ad`:
 
 ```sh
-docker run --rm -e HOME=/tmp -e AKTUAR_ROOT=/work -v "$PWD":/work -v /tmp/sicr:/sicr:ro -w /work aktuar-r:1 Rscript nachpruefung/skripte/wirkung.R
-docker run --rm -e HOME=/tmp -e AKTUAR_ROOT=/work -v "$PWD":/work -v /tmp/sicr:/sicr:ro -w /work aktuar-r:1 Rscript nachpruefung/skripte/both_ways_stichprobe.R
-docker run --rm -e HOME=/tmp -e AKTUAR_ROOT=/work -v "$PWD":/work -v /tmp/sicr:/sicr:ro -w /work aktuar-r:1 Rscript nachpruefung/skripte/mutanten_verbesserungen.R
-docker run --rm -e HOME=/tmp -e AKTUAR_ROOT=/work -v "$PWD":/work -v /tmp/sicr:/sicr:ro -w /work aktuar-r:1 Rscript nachpruefung/skripte/benchmarks_spanne.R 5
-docker run --rm -e HOME=/tmp -e AKTUAR_ROOT=/work -v "$PWD":/work -v /tmp/sicr:/sicr:ro -w /work aktuar-r:1 Rscript nachpruefung/skripte/f_f01_vignette.R
+docker run --rm -u "$(id -u):$(id -g)" -e HOME=/tmp -e AKTUAR_ROOT=/work -v "$PWD":/work -v /tmp/sicr:/sicr:ro -w /work aktuar-r:1 Rscript nachpruefung/skripte/wirkung.R
+docker run --rm -u "$(id -u):$(id -g)" -e HOME=/tmp -e AKTUAR_ROOT=/work -v "$PWD":/work -v /tmp/sicr:/sicr:ro -w /work aktuar-r:1 Rscript nachpruefung/skripte/both_ways_stichprobe.R
+docker run --rm -u "$(id -u):$(id -g)" -e HOME=/tmp -e AKTUAR_ROOT=/work -v "$PWD":/work -v /tmp/sicr:/sicr:ro -w /work aktuar-r:1 Rscript nachpruefung/skripte/mutanten_verbesserungen.R
+docker run --rm -u "$(id -u):$(id -g)" -e HOME=/tmp -e AKTUAR_ROOT=/work -v "$PWD":/work -v /tmp/sicr:/sicr:ro -w /work aktuar-r:1 Rscript nachpruefung/skripte/benchmarks_spanne.R 5
+docker run --rm -u "$(id -u):$(id -g)" -e HOME=/tmp -e AKTUAR_ROOT=/work -v "$PWD":/work -v /tmp/sicr:/sicr:ro -w /work aktuar-r:1 Rscript nachpruefung/skripte/f_f01_vignette.R
 ```
 
 Wie Metriken und Bericht entstehen, steht im Abschnitt [Reproduktion](bericht/bericht.md#reproduktion) des

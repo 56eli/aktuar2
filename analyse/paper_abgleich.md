@@ -101,7 +101,7 @@ Die Matrix prüft das R-Paket sicr 1.1.1 gegen eine eigene Prüf-Checkliste D.1�
 | D.11.1 | G, M, T, Klassen, Historienlänge, Ausschlüsse, Indexreihe und Indexjahr dokumentieren (S. 57) | `prepare_data()` `R/data_functions.R:560-637`; `generate_pools()` `R/generate_pools.R:3-12`; `add_transition_factor()` `R/data_functions.R:84-100`; Vignette `vignettes/sicr.Rmd:145-166, 304, 417-421` | konform | – | – |
 | D.11.2 | Behandlung von Renten, Sonderschäden, Spätgroßschäden und Basisschäden dokumentieren (S. 13, 16–18) | `R/annuity_functions.R:88-104`; `R/special_claims.R:102-120`; `R/ibnr.R:318-336`; `compute_small_claims()` `R/small_claims.R:444-467` | konform | C-H03 | – |
 | D.11.3 | RV-Programm und verwendete Vereinfachungen dokumentieren (S. 18–19) | `xl_cashflow()` `R/reinsurance.R:126-188`; `reinsurance_xmpl` `R/data.R:221-238` | konform | C-H05 | – |
-| D.11.4 | Backtesting- und Sensitivitätsergebnisse je Bestand dokumentieren (S. 20–54) | Keine Ergebnissammlung im Paket; nur Backtesting-Funktionen `R/plots.R:1209-2120` | kein Paperbezug | – | Das Paper enthält kein Wort „Dokumentation“; eine Ergebnissammlung je Bestand ist Anwenderpflicht, keine Paketanforderung. |
+| D.11.4 | Backtesting- und Sensitivitätsergebnisse je Bestand dokumentieren (S. 20–54) | Keine Ergebnissammlung im Paket; nur Backtesting-Funktionen `R/plots.R:1209-2120` | kein Paperbezug | – | Das Paper enthält kein Wort „Dokumentation“; eine Ergebnissammlung je Bestand ist im Paper nicht geregelt, also weder Paket- noch Anwenderpflicht aus dem Paper. |
 
 ## Zusammenfassung
 
