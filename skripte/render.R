@@ -32,11 +32,12 @@ html_pfad <- file.path("artefakt", "sicr_methode.html")
 html <- paste(readLines(html_pfad, warn = FALSE, encoding = "UTF-8"), collapse = "\n")
 link_tags <- regmatches(html, gregexpr("<link[^>]*>", html,
                                        ignore.case = TRUE, perl = TRUE))[[1]]
-extern <- grepl('src="http', html, fixed = TRUE) ||
-   any(grepl('href="http', link_tags, fixed = TRUE)) ||
-   grepl("@import", html, fixed = TRUE) ||
-   grepl("url(http", html, fixed = TRUE) ||
-   grepl("mathjax", html, ignore.case = TRUE)
+extern_url <- "(https?:)?//"
+extern <- grepl(paste0("(?i)\\bsrc\\s*=\\s*[\"']?", extern_url), html, perl = TRUE) ||
+   any(grepl(paste0("(?i)\\bhref\\s*=\\s*[\"']?", extern_url), link_tags, perl = TRUE)) ||
+   grepl("(?i)@import", html, perl = TRUE) ||
+   grepl(paste0("(?i)url\\(\\s*[\"']?", extern_url), html, perl = TRUE) ||
+   grepl("(?i)<script[^>]*mathjax", html, perl = TRUE)
 if (extern) {
    stop("sicr_methode.html lädt externe Ressourcen oder MathJax", call. = FALSE)
 }

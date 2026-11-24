@@ -215,7 +215,16 @@ grafik_fehler_nach_schritt <- function(root = Sys.getenv("AKTUAR_ROOT", ".")) {
       stop("Schwere fehlt für: ", paste(d$ID[is.na(d$schwere)], collapse = ", "),
            call. = FALSE)
    }
-   d$Schritt <- factor(d$Schritt, levels = paste0("D.", 1:11))
+   # Die Zuordnung muss vollstaendig und gueltig sein, sonst faellt eine Zeile still aus der Grafik.
+   schritte <- paste0("D.", 1:11)
+   if (!all(d$Schritt %in% schritte)) {
+      stop("Ungültiger Schritt in befunde_methodenschritt.csv: ",
+           paste(unique(d$Schritt[!d$Schritt %in% schritte]), collapse = ", "), call. = FALSE)
+   }
+   if (anyDuplicated(d$ID) || !setequal(d$ID, f$id)) {
+      stop("befunde_methodenschritt.csv deckt nicht genau die Fehler aus analyse/ ab", call. = FALSE)
+   }
+   d$Schritt <- factor(d$Schritt, levels = schritte)
    d$schwere <- factor(as.character(d$schwere),
                        levels = c("kritisch", "hoch", "mittel", "niedrig"))
    d <- d[order(d$Schritt, d$schwere, d$ID), , drop = FALSE]
