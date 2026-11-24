@@ -2,7 +2,7 @@
 # Alle Funktionen lesen die Quellen im Repo über einen Wurzelpfad; Standard ist
 # die Umgebungsvariable AKTUAR_ROOT, sonst das aktuelle Verzeichnis.
 #
-# Verwendung aus bericht/ oder praesentation/:
+# Verwendung aus bericht/ oder artefakt/:
 #   source("../skripte/grafiken.R")
 #   grafik_paper(root = "..")
 
@@ -24,6 +24,9 @@ pal_schwere <- c(kritisch = "#CC79A7", hoch = "#D55E00",
 pal_paper <- c("konform" = "#009E73", "konform (Fehler)" = "#E69F00",
                "abweichend" = "#D55E00", "optional" = "#56B4E9",
                "kein Paperbezug" = "#999999")
+pal_paper_artefakt <- c("konform" = "#3B6E8F", "konform (Fehler)" = "#C78362",
+                        "abweichend" = "#9E2A2B", "optional" = "#B8B2A6",
+                        "kein Paperbezug" = "#D9D4C7")
 pal_status <- c("grün" = "#009E73", "rot" = "#D55E00",
                 "keine Daten" = "#E8E8E8")
 pal_richtung <- c(schneller = "#009E73", langsamer = "#D55E00")
@@ -42,6 +45,31 @@ theme_aktuar <- function(base_size = 12) {
          panel.grid.major = ggplot2::element_line(colour = "#E5E5E5", linewidth = 0.3),
          legend.position = "bottom",
          legend.title = ggplot2::element_blank(),
+         plot.title.position = "plot",
+         plot.caption.position = "plot",
+         plot.margin = ggplot2::margin(8, 12, 8, 8)
+      )
+}
+
+theme_artefakt <- function(base_size = 13) {
+   ggplot2::theme_minimal(base_size = base_size) +
+      ggplot2::theme(
+         plot.background = ggplot2::element_rect(fill = "#FEFCF7", colour = NA),
+         panel.background = ggplot2::element_rect(fill = "#FEFCF7", colour = NA),
+         text = ggplot2::element_text(colour = "#14213D"),
+         plot.title = ggplot2::element_text(family = "serif", face = "bold",
+                                            size = base_size + 3, hjust = 0,
+                                            colour = "#14213D"),
+         plot.subtitle = ggplot2::element_text(family = "serif", colour = "#525F76"),
+         plot.caption = ggplot2::element_text(colour = "#525F76",
+                                              size = base_size - 3, hjust = 0),
+         axis.title = ggplot2::element_text(colour = "#14213D"),
+         axis.text = ggplot2::element_text(colour = "#14213D"),
+         panel.grid.minor = ggplot2::element_blank(),
+         panel.grid.major = ggplot2::element_line(colour = "#E4E0D6", linewidth = 0.3),
+         legend.position = "bottom",
+         legend.title = ggplot2::element_blank(),
+         legend.text = ggplot2::element_text(colour = "#525F76"),
          plot.title.position = "plot",
          plot.caption.position = "plot",
          plot.margin = ggplot2::margin(8, 12, 8, 8)
@@ -101,6 +129,17 @@ daten_paper <- function(root = Sys.getenv("AKTUAR_ROOT", ".")) {
    d
 }
 
+schritte_methode <- function(root = Sys.getenv("AKTUAR_ROOT", ".")) {
+   root <- standard_wurzel(root)
+   f <- file.path(root, "analyse", "paper_abgleich.md")
+   z <- grep("^## D\\.[0-9]+ ", lies_zeilen(f), value = TRUE)
+   data.frame(
+      Schritt = sub("^## (D\\.[0-9]+) .*$", "\\1", z),
+      Name = sub("^## D\\.[0-9]+ ", "", z),
+      stringsAsFactors = FALSE
+   )
+}
+
 # ---------------------------------------------------------------------------
 # Grafiken
 # ---------------------------------------------------------------------------
@@ -120,6 +159,105 @@ grafik_paper <- function(root = Sys.getenv("AKTUAR_ROOT", ".")) {
       ) +
       theme_aktuar() +
       ggplot2::theme(legend.position = "bottom")
+}
+
+grafik_methodenkette <- function(root = Sys.getenv("AKTUAR_ROOT", ".")) {
+   root <- standard_wurzel(root)
+   d <- daten_paper(root)
+   s <- schritte_methode(root)
+   d$Schritt <- d$kapitel
+   d$Name <- s$Name[match(d$Schritt, s$Schritt)]
+   z <- as.data.frame(table(Schritt = d$Schritt, Name = d$Name,
+                            einstufung = d$einstufung),
+                      stringsAsFactors = FALSE)
+   names(z)[4] <- "n"
+   z <- z[z$n > 0, , drop = FALSE]
+   z$einstufung <- factor(z$einstufung, levels = levels(d$einstufung))
+   z$Label <- factor(paste0(z$Schritt, " ", z$Name),
+                     levels = rev(paste0(s$Schritt, " ", s$Name)))
+   z$textfarbe <- ifelse(z$einstufung %in% c("optional", "kein Paperbezug"),
+                         "#14213D", "white")
+   untertitel <- sprintf(
+      "%d Prüfpunkte: %d konform · %d konform mit Fehler · %d abweichend · %d optional · %d ohne Paperbezug",
+      nrow(d),
+      sum(d$einstufung == "konform"),
+      sum(d$einstufung == "konform (Fehler)"),
+      sum(d$einstufung == "abweichend"),
+      sum(d$einstufung == "optional"),
+      sum(d$einstufung == "kein Paperbezug")
+   )
+   ggplot2::ggplot(z, ggplot2::aes(x = n, y = Label, fill = einstufung, group = einstufung)) +
+      ggplot2::geom_col(width = 0.72) +
+      ggplot2::geom_text(ggplot2::aes(label = n, colour = textfarbe),
+                         position = ggplot2::position_stack(vjust = 0.5),
+                         size = 3.4, show.legend = FALSE) +
+      ggplot2::scale_colour_identity() +
+      ggplot2::scale_fill_manual(values = pal_paper_artefakt, drop = FALSE, name = NULL) +
+      ggplot2::scale_x_continuous(expand = ggplot2::expansion(mult = c(0, 0.04))) +
+      ggplot2::labs(
+         x = "Prüfpunkte", y = NULL,
+         title = "Wo sicr der Methode folgt",
+         subtitle = untertitel,
+         caption = "Quelle: analyse/paper_abgleich.md"
+      ) +
+      theme_artefakt() +
+      ggplot2::theme(panel.grid.major.y = ggplot2::element_blank())
+}
+
+grafik_fehler_nach_schritt <- function(root = Sys.getenv("AKTUAR_ROOT", ".")) {
+   root <- standard_wurzel(root)
+   d <- utils::read.csv(file.path(root, "daten", "befunde_methodenschritt.csv"),
+                        stringsAsFactors = FALSE, check.names = FALSE)
+   f <- daten_fehler(root)
+   d <- merge(d, f[, c("id", "schwere")], by.x = "ID", by.y = "id",
+              all.x = TRUE, sort = FALSE)
+   if (any(is.na(d$schwere))) {
+      stop("Schwere fehlt für: ", paste(d$ID[is.na(d$schwere)], collapse = ", "),
+           call. = FALSE)
+   }
+   # Die Zuordnung muss vollstaendig und gueltig sein, sonst faellt eine Zeile still aus der Grafik.
+   schritte <- paste0("D.", 1:11)
+   if (!all(d$Schritt %in% schritte)) {
+      stop("Ungültiger Schritt in befunde_methodenschritt.csv: ",
+           paste(unique(d$Schritt[!d$Schritt %in% schritte]), collapse = ", "), call. = FALSE)
+   }
+   if (anyDuplicated(d$ID) || !setequal(d$ID, f$id)) {
+      stop("befunde_methodenschritt.csv deckt nicht genau die Fehler aus analyse/ ab", call. = FALSE)
+   }
+   d$Schritt <- factor(d$Schritt, levels = schritte)
+   d$schwere <- factor(as.character(d$schwere),
+                       levels = c("kritisch", "hoch", "mittel", "niedrig"))
+   d <- d[order(d$Schritt, d$schwere, d$ID), , drop = FALSE]
+   laeufe <- rle(as.integer(d$Schritt))
+   d$y <- unlist(lapply(laeufe$lengths, function(n) seq_len(n) - 0.5),
+                 use.names = FALSE)
+   # Kacheln mit expliziter Hoehe y statt geom_bar: so steht jede ID sicher in ihrer eigenen Kachel.
+   ggplot2::ggplot(d, ggplot2::aes(x = Schritt, y = y, fill = schwere)) +
+      ggplot2::geom_tile(width = 0.72, height = 0.96) +
+      ggplot2::geom_text(ggplot2::aes(label = ID), size = 2.8,
+                         colour = ifelse(d$schwere == "niedrig", "#14213D", "white"),
+                         show.legend = FALSE) +
+      ggplot2::scale_fill_manual(
+         values = c(kritisch = "#5A0F10", hoch = "#9E2A2B",
+                    mittel = "#C78362", niedrig = "#B8B2A6"),
+         drop = TRUE, name = NULL
+      ) +
+      ggplot2::scale_x_discrete(drop = FALSE) +
+      ggplot2::scale_y_continuous(
+         limits = c(0, max(d$y) + 0.5),
+         expand = ggplot2::expansion(mult = c(0, 0.05)),
+         breaks = function(lim) seq(0, floor(lim[2]), by = 1)
+      ) +
+      ggplot2::labs(
+         x = "Methodenschritt", y = "Fehler",
+         title = sprintf("%d Fehler nach Methodenschritt", nrow(d)),
+         subtitle = sprintf("%d hoch · %d mittel · %d niedrig",
+                            sum(d$schwere == "hoch"),
+                            sum(d$schwere == "mittel"),
+                            sum(d$schwere == "niedrig")),
+         caption = "Quelle: daten/befunde_methodenschritt.csv; analyse/A_*.md bis analyse/F_*.md"
+      ) +
+      theme_artefakt()
 }
 
 grafik_schwere <- function(root = Sys.getenv("AKTUAR_ROOT", ".")) {
@@ -147,7 +285,8 @@ grafik_schwere <- function(root = Sys.getenv("AKTUAR_ROOT", ".")) {
       ggplot2::theme(legend.position = "bottom")
 }
 
-grafik_wirkung <- function(root = Sys.getenv("AKTUAR_ROOT", ".")) {
+grafik_wirkung <- function(root = Sys.getenv("AKTUAR_ROOT", "."),
+                            thema = theme_aktuar) {
    root <- standard_wurzel(root)
    w <- utils::read.csv(file.path(root, "nachpruefung", "ergebnisse", "wirkung.csv"),
                         stringsAsFactors = FALSE, check.names = FALSE)
@@ -230,12 +369,13 @@ grafik_wirkung <- function(root = Sys.getenv("AKTUAR_ROOT", ".")) {
          subtitle = "Dreiecke: Wert hängt von der zufälligen Umordnung der Eingabe ab (Seed 42)",
          caption = "Quellen: nachpruefung/ergebnisse/wirkung.csv und f_f01_vignette.csv"
       ) +
-      theme_aktuar() +
+      thema() +
       ggplot2::theme(legend.position = "bottom",
                      strip.text.y = ggplot2::element_text(angle = 0, hjust = 0, face = "bold"))
 }
 
-grafik_testmatrix_kompakt <- function(root = Sys.getenv("AKTUAR_ROOT", ".")) {
+grafik_testmatrix_kompakt <- function(root = Sys.getenv("AKTUAR_ROOT", "."),
+                                      thema = theme_aktuar) {
    root <- standard_wurzel(root)
    r2 <- utils::read.csv(file.path(root, "gegenpruefung", "both_ways.csv"), stringsAsFactors = FALSE)
    r3 <- utils::read.csv(file.path(root, "nachpruefung", "ergebnisse", "both_ways_stichprobe.csv"),
@@ -268,7 +408,7 @@ grafik_testmatrix_kompakt <- function(root = Sys.getenv("AKTUAR_ROOT", ".")) {
       ggplot2::labs(x = NULL, y = NULL,
                     title = "Jeder Test unterscheidet richtig von falsch",
                     caption = "Quellen: gegenpruefung/both_ways.csv;\nnachpruefung/ergebnisse/both_ways_stichprobe.csv, mutanten_verbesserungen.csv") +
-      theme_aktuar(base_size = 14) +
+      thema(base_size = 14) +
       ggplot2::theme(panel.grid = ggplot2::element_blank(), legend.position = "none")
 }
 
@@ -355,7 +495,8 @@ grafik_testmatrix <- function(root = Sys.getenv("AKTUAR_ROOT", ".")) {
       )
 }
 
-grafik_benchmarks <- function(root = Sys.getenv("AKTUAR_ROOT", ".")) {
+grafik_benchmarks <- function(root = Sys.getenv("AKTUAR_ROOT", "."),
+                             thema = theme_aktuar) {
    root <- standard_wurzel(root)
    d <- utils::read.csv(
       file.path(root, "nachpruefung", "ergebnisse",
@@ -387,42 +528,7 @@ grafik_benchmarks <- function(root = Sys.getenv("AKTUAR_ROOT", ".")) {
          subtitle = "Punkt = Median, Strich = Minimum–Maximum; 1× = keine Änderung",
          caption = "Quelle: nachpruefung/ergebnisse/benchmarks_spanne_zusammenfassung.csv"
       ) +
-      theme_aktuar() +
+      thema() +
       ggplot2::theme(legend.position = "bottom")
 }
 
-grafik_runden <- function(root = Sys.getenv("AKTUAR_ROOT", ".")) {
-   themen <- c("Anhang D", "E-F01", "F-F01", "Paper-Punkte", "Benchmarks")
-   runden <- c("Runde 1\nAudit", "Runde 2\nGegenprüfung", "Runde 3\nNachprüfung")
-   d <- data.frame(
-      thema = rep(themen, each = 3),
-      runde = rep(runden, times = 5),
-      text = c(
-         "46 Punkte als\nAnhang D", "kein Anhang D:\neigene Checkliste", "kein Anhang D\n(PDF selbst geprüft)",
-         "kritisch", "hoch: 0,0 % im Beispiel;\nPrio. 500.000: −7 % XL", "hoch bestätigt;\nPrio. 500.000: −7 % XL, +3 % netto",
-         "rund 16 %", "+9,1 % / +22,8 %\n(Jahre ohne Daten)", "+5,95 % im Backtesting\nder Vignette (2023)",
-         "3 fehlen", "2 optional,\n1 Anwenderpflicht", "2 optional,\n1 kein Paperbezug",
-         "Punktfaktoren", "3 Läufe:\nSpannen", "5 Läufe:\nSpannen"
-      ),
-      stringsAsFactors = FALSE
-   )
-   d$thema <- factor(d$thema, levels = rev(themen))
-   d$runde <- factor(d$runde, levels = runden)
-
-   ggplot2::ggplot(d, ggplot2::aes(x = runde, y = thema, fill = runde)) +
-      ggplot2::geom_tile(colour = "white", linewidth = 1.2) +
-      ggplot2::geom_text(ggplot2::aes(label = text), size = 3.1, lineheight = 0.9) +
-      ggplot2::scale_fill_manual(values = c("#D6EAF3", "#FBE4C4", "#D5EFE6"),
-                                 guide = "none") +
-      ggplot2::labs(
-         x = NULL, y = NULL,
-         title = "Was die Prüfrunden geändert haben",
-         subtitle = "Von der Auditfassung über die Gegenprüfung zum Endstand",
-         caption = "Quellen: analyse/*.md, gegenpruefung/bericht.md, nachpruefung/bericht.md"
-      ) +
-      theme_aktuar() +
-      ggplot2::theme(
-         panel.grid = ggplot2::element_blank(),
-         axis.text.x = ggplot2::element_text(face = "bold")
-      )
-}

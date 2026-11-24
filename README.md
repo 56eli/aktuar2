@@ -13,7 +13,8 @@ Skowasch (Version 1.1.1, Commit `c0ad2ad`) auf drei Fragen:
 Die gesamte wissenschaftliche Arbeit ist in R gerechnet.
 
 **→ [Prüfbericht lesen](bericht/bericht.md)**
-**→ [Präsentation](praesentation/praesentation.html)** (selbstenthaltene HTML-Datei zum Herunterladen und Öffnen)
+**→ [Methoden-Artefakt](artefakt/sicr_methode.html)** (eine selbstenthaltene HTML-Seite zum Herunterladen,
+Öffnen und Hochladen als claude.ai-Artifact)
 
 ## Ergebnis auf einen Blick
 
@@ -51,12 +52,21 @@ Die wichtigsten Befunde:
 | 2 – Gegenprüfung (seat oc1) | [`gegenpruefung/`](gegenpruefung/) | alle 30 Fehler both-ways bestätigt; E-F01 kritisch→hoch; „Anhang D“ widerlegt; F-F01-Zahl relativiert |
 | 3 – Nachprüfung (cl1) | [`nachpruefung/`](nachpruefung/) | F-F01 im Vignettenfall +5,95 %; D.11.4 ohne Paperbezug; 10/10 eigene Mutanten, 12/12 Verbesserungsmutanten; Benchmark-Spannen aus 5 Läufen |
 
+## Methoden-Artefakt
+
+[`artefakt/sicr_methode.html`](artefakt/sicr_methode.html) stellt die elf Methodenschritte D.1–D.11 in den
+Mittelpunkt: wie sicr 1.1.1 sie umsetzt, wo es abweicht und welche Fehler Ergebnisse bewegen. Die Seite ist
+vollständig selbstenthalten (keine externen Schriften, Skripte, Stile oder Bilder) und lässt sich direkt als
+claude.ai-Artifact hochladen. Gerendert wird sie aus `artefakt/sicr_methode.Rmd`, `artefakt/stil.css` und
+`artefakt/navigation.js` mit `Rscript skripte/render.R`; die Folien lassen sich mit Pfeiltasten, Bild auf/ab
+und der Leertaste durchblättern.
+
 ## Aufbau
 
 | Pfad | Inhalt |
 |---|---|
 | [`bericht/bericht.md`](bericht/bericht.md) | Prüfbericht mit Grafiken, gerendert aus `bericht.Rmd` |
-| [`praesentation/praesentation.html`](praesentation/praesentation.html) | Foliensatz (12 Folien), selbstenthaltene HTML-Datei zum Herunterladen und Öffnen |
+| [`artefakt/sicr_methode.html`](artefakt/sicr_methode.html) | Methoden-Artefakt: selbstenthaltene HTML-Seite, als claude.ai-Artifact nutzbar |
 | [`analyse/`](analyse/) | Sechs Gruppenanalysen A–F mit je einem Abschnitt pro Funktion, dazu die [Paperabgleich-Matrix](analyse/paper_abgleich.md) und die Gegenprüfungen |
 | [`befunde/`](befunde/) | `test-<ID>.R`: ein Test je Fehler. Grün heißt, der Fehler besteht in sicr 1.1.1. Ein zweiter Test zeigt die Korrektur. |
 | [`verbesserungen/`](verbesserungen/) | `<ID>.R`: Korrekturen und Verbesserungen als Funktionen `<name>_v()` |
@@ -82,7 +92,7 @@ docker build -t aktuar-r:1 docker
 docker run --rm -u "$(id -u):$(id -g)" -e HOME=/tmp -v "$PWD":/work -w /work aktuar-r:1 Rscript skripte/tests_ausfuehren.R   # alle Tests
 docker run --rm -u "$(id -u):$(id -g)" -e HOME=/tmp -v "$PWD":/work -w /work aktuar-r:1 Rscript skripte/einzeltest.R befunde/test-E-F01.R
 docker run --rm -u "$(id -u):$(id -g)" -e HOME=/tmp -v "$PWD":/work -w /work aktuar-r:1 Rscript skripte/benchmarks.R
-docker run --rm -u "$(id -u):$(id -g)" -e HOME=/tmp -v "$PWD":/work -w /work aktuar-r:1 Rscript skripte/render.R              # Bericht und Präsentation
+docker run --rm -u "$(id -u):$(id -g)" -e HOME=/tmp -v "$PWD":/work -w /work aktuar-r:1 Rscript skripte/render.R              # Bericht und Methoden-Artefakt
 ```
 
 Runde 3 läuft aus der Repo-Wurzel; `<sicr>` ist ein Checkout von sicr an Commit `c0ad2ad`:

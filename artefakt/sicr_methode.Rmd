@@ -1,0 +1,277 @@
+---
+pagetitle: "Wie sicr 1.1.1 die Skowasch-Methode umsetzt"
+output:
+  html_document:
+    self_contained: true
+    mathjax: null
+    theme: null
+    highlight: null
+    section_divs: true
+    css: stil.css
+    includes:
+      after_body: navigation.js
+    fig_retina: 2
+    dev: png
+    fig_width: 10
+    fig_height: 6
+---
+
+```{r setup, include = FALSE}
+wurzel <- normalizePath(Sys.getenv("AKTUAR_ROOT", ".."))
+source("../skripte/grafiken.R")
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE,
+                      fig.retina = 2, dev = "png", dpi = 110)
+
+paket_version <- "1.1.1"
+paket_commit <- "c0ad2ad"
+
+paper <- daten_paper(wurzel)
+fehler <- daten_fehler(wurzel)
+verb <- daten_verbesserungen(wurzel)
+w <- utils::read.csv(file.path(wurzel, "nachpruefung", "ergebnisse", "wirkung.csv"),
+                     stringsAsFactors = FALSE, check.names = FALSE)
+ff <- utils::read.csv(file.path(wurzel, "nachpruefung", "ergebnisse", "f_f01_vignette.csv"),
+                      stringsAsFactors = FALSE, check.names = FALSE)
+
+fmt <- function(x, digits = 1) {
+   ifelse(is.na(x), "–",
+          formatC(x, format = "f", digits = digits, decimal.mark = ",",
+                  big.mark = "."))
+}
+prozent <- function(x, digits = 1) {
+   ifelse(is.na(x), "–",
+          paste0(ifelse(x > 0, "+", ""), fmt(x, digits), " %"))
+}
+wzeile <- function(id, muster = NULL) {
+   i <- which(w$ID == id)
+   if (!is.null(muster)) i <- i[grepl(muster, w$Groesse[i], fixed = TRUE)]
+   if (!length(i)) stop("Wirkungszeile fehlt: ", id, " / ", muster, call. = FALSE)
+   w[i[1], , drop = FALSE]
+}
+
+a100 <- wzeile("A-F01", "0/1e+05")
+a250 <- wzeile("A-F01", "0/250000")
+a500 <- wzeile("A-F01", "0/5e+05")
+bf01 <- wzeile("B-F01", "Anteil Jahre")
+cf03 <- wzeile("C-F03", "Summe erwartete")
+df01 <- wzeile("D-F01", "Undiskontierte")
+df07 <- wzeile("D-F07", "Indexjahr 2022 gegen 2018")
+df03 <- wzeile("D-F03/E-F02", "Anteil Anfalljahre")
+ef01_0_xl <- wzeile("E-F01", "Zediertes XL Grossschaden, Beispielprioritaeten")
+ef01_xl <- wzeile("E-F01", "Zediertes XL Grossschaden, Prioritaet 500000")
+ef01_net <- wzeile("E-F01", "Nettoreserve Grossschaden, Prioritaet 500000")
+prio_text <- fmt(as.numeric(sub(".*Prioritaet ([0-9]+).*", "\\1",
+                                ef01_xl$Groesse)), 0)
+
+ff_summe <- ff[ff$Reserveklasse == "Summe", , drop = FALSE][1, , drop = FALSE]
+ff_prozent <- (ff_summe$Ist_korrigiert / ff_summe$Ist_original - 1) * 100
+
+einstufung <- function(x) sum(paper$einstufung == x)
+ids <- function(x) paste(paper$nr[paper$einstufung == x], collapse = ", ")
+```
+
+## Wie sicr 1.1.1 die Skowasch-Methode umsetzt {.dark .titel}
+
+<p class="kicker">DAV-ERGEBNISBERICHT · METHODENPRÜFUNG</p>
+
+<p class="lead">Paket sicr `r paket_version`, Commit `r paket_commit` · DAV-Ergebnisbericht vom 04.02.2025 · Stand nach drei Prüfrunden.</p>
+<p class="note">Codezeilen in den Fußzeilen beziehen sich auf sicr `r paket_version` @ `r paket_commit` (Verzeichnis <code>R/</code> des Pakets).</p>
+
+<p class="lead-sub">Die elf Schritte der Methode und ihre Umsetzung: wo sicr folgt, wo es abweicht und welche Fehler Ergebnisse bewegen.</p>
+
+## Die Methode in elf Schritten {.methode}
+
+<p class="kicker">D.1–D.11 · CHECKLISTE AUS KAPITEL 2</p>
+
+```{r methodenkette, fig.width = 10, fig.height = 6.4}
+grafik_methodenkette(wurzel)
+```
+
+<p class="note">Jeder Balken zählt die Prüfpunkte eines Methodenschritts. Die Checkliste ist aus Kapitel 2 des Berichts abgeleitet; der Bericht selbst hat keinen Anhang D.</p>
+
+## Das Gesamturteil {.gesamturteil}
+
+<p class="kicker">PRÜFPUNKTE · EIGENE CHECKLISTE D.1–D.11</p>
+
+<div class="cards">
+<div class="card"><div class="zahl">`r einstufung("konform")`</div><div class="cap">konform</div></div>
+<div class="card"><div class="zahl">`r einstufung("konform (Fehler)")`</div><div class="cap">konform mit Fehler</div></div>
+<div class="card akzent"><div class="zahl">`r einstufung("abweichend")`</div><div class="cap">abweichend: `r ids("abweichend")`</div></div>
+<div class="card"><div class="zahl">`r einstufung("optional")`</div><div class="cap">optional: `r ids("optional")`</div></div>
+<div class="card"><div class="zahl">`r einstufung("kein Paperbezug")`</div><div class="cap">ohne Paperbezug: `r ids("kein Paperbezug")`</div></div>
+</div>
+
+<p class="note">Der DAV-Bericht hat keinen Anhang D; die `r nrow(paper)` Punkte sind eine eigene Checkliste, aus Kapitel 2 (S. 10–19) abgeleitet.</p>
+
+## Wo sich Ergebnisse am stärksten bewegen {.wirkung}
+
+<p class="kicker">WIRKUNG · BEISPIELDATEN</p>
+
+```{r wirkung, fig.width = 10, fig.height = 5.6}
+grafik_wirkung(wurzel, thema = theme_artefakt)
+```
+
+<p class="note">Am stärksten bewegen sich die künftigen Basisrenten (D-F07, `r prozent(df07$Abweichung_prozent)`), der Ist-Wert im Backtesting (F-F01, `r prozent(ff_prozent, 2)`) und die Nachlaufpoolmasse (A-F01, `r prozent(a100$Abweichung_prozent, 2)`). Die Dreiecke markieren Werte, die von der Zeilenreihenfolge der Eingabe abhängen; sie illustrieren den Mechanismus.</p>
+
+## D.1 Daten und Indizierung {.finding}
+
+<p class="kicker">DATEN · D.1</p>
+
+<div class="two-col">
+<div class="col">
+<h3>Folge</h3>
+<p><strong>B-F01 (hoch)</strong> ordnet historische Indizes nach Zeilenposition statt nach <code>Calendar_year</code> zu. Bei unsortierter Eingabe erhalten <strong>`r fmt(bf01$Abweichung_prozent)` %</strong> der Jahre einen falschen Index.</p>
+<p>Dasselbe Muster zeigt sich bei <strong>C-F03</strong>, <strong>D-F03</strong> und <strong>E-F02</strong>: Exposure und Quoten werden ebenfalls positionsabhängig zugeordnet.</p>
+</div>
+<div class="col">
+<h3>Nicht betroffen</h3>
+<p>Die übrigen Schritte der Indexierung und Datenaufbereitung folgen der Methode. sicr löst dieselbe Zuordnung an anderer Stelle bereits richtig mit <code>match()</code>, etwa in der Rückversicherung.</p>
+<p>Die Korrekturen übernehmen dieses Muster, statt die Sortierung der Eingabe vorauszusetzen.</p>
+</div>
+</div>
+
+<p class="codeline">data_functions.R:47–49 · expand_historic_indices() · reinsurance.R:296 · match()</p>
+
+## D.3/D.5 Nachlauf {.finding}
+
+<p class="kicker">NACHLAUF · D.5</p>
+
+<p><strong>A-F01 (hoch)</strong> wendet die Ausreißergrenzen im Nachlauf nach der Hochskalierung auf das Niveau von M+1 an. Sobald Grenzen gesetzt sind, kappen sie dadurch zu streng.</p>
+
+<div class="cards three">
+<div class="card akzent"><div class="zahl">`r prozent(a100$Abweichung_prozent, 2)`</div><div class="cap">Nachlaufpoolmasse, Grenzen 0 / 100 Tsd.</div></div>
+<div class="card akzent"><div class="zahl">`r prozent(a250$Abweichung_prozent, 2)`</div><div class="cap">Nachlaufpoolmasse, Grenzen 0 / 250 Tsd.</div></div>
+<div class="card akzent"><div class="zahl">`r prozent(a500$Abweichung_prozent, 2)`</div><div class="cap">Nachlaufpoolmasse, Grenzen 0 / 500 Tsd.</div></div>
+</div>
+
+<p class="note">Die Nachlaufdefinition selbst und die lineare Skalierung folgen der Methode; betroffen ist nur die Reihenfolge von Kappung und Hochskalierung. In der Checkliste ist A-F01 dem Schritt D.3 zugeordnet.</p>
+
+<p class="codeline">generate_pools.R:130–139 · Grenzen nach der Hochskalierung</p>
+
+## D.6 Spätgroßschäden {.finding}
+
+<p class="kicker">IBNR · D.6</p>
+
+<div class="two-col">
+<div class="col">
+<h3>Folge</h3>
+<p><strong>C-F03 (hoch)</strong> ordnet die Bestandsgrößen der Exposure nach Zeilenposition statt nach Anfalljahr zu. Im Permutationsfall stehen <strong>`r fmt(cf03$Original)`</strong> statt <strong>`r fmt(cf03$Korrigiert)`</strong> erwartete IBNR-Schäden (`r prozent(cf03$Abweichung_prozent)`).</p>
+<p>Der Wert hängt von der zufälligen Zeilenreihenfolge der Eingabe ab; er ist eine Illustration des Mechanismus, kein fester Punktwert.</p>
+</div>
+<div class="col">
+<h3>Abweichung D.6.1</h3>
+<p>Das additive Modell lässt das letzte Abwicklungsjahr N weg (<strong>C-F05</strong>), dessen Spätgroßschäden damit nicht zählen. C-F03 verschiebt die Bestandsgrößen zusätzlich positionsabhängig statt nach Anfalljahr.</p>
+<p>Die übrige Kette – additive Anzahlen, Rundung, Höhe aus dem IBNR-Pool – folgt der Methode.</p>
+</div>
+</div>
+
+<p class="codeline">ibnr.R:104–118 · exposure; ibnr.R:49 · letztes Abwicklungsjahr</p>
+
+## D.7 Basisschäden und Renten {.finding}
+
+<p class="kicker">RENTEN · D.7</p>
+
+<div class="cards three">
+<div class="card akzent"><div class="zahl">`r prozent(df07$Abweichung_prozent)`</div><div class="cap">D-F07: künftige Basisrenten bei zwei Indexjahren</div></div>
+<div class="card akzent"><div class="zahl">`r prozent(df01$Abweichung_prozent, 2)`</div><div class="cap">D-F01: undiskontierte Rentenzahlungen</div></div>
+<div class="card"><div class="zahl">`r fmt(df03$Abweichung_prozent)` %</div><div class="cap">D-F03: Anfalljahre mit falscher Quote</div></div>
+</div>
+
+<p><strong>D-F07 (hoch)</strong> macht das Ergebnis der künftigen Basisrenten vom gewählten Indexjahr abhängig. <strong>D-F01 (mittel)</strong> setzt die Sterblichkeit bekannter Renten um ein Lebensjahr zu jung an. <strong>D-F03 (hoch)</strong> ordnet die Quota-Share-Rückversicherung positionsabhängig statt nach Anfalljahr zu.</p>
+
+<p class="codeline">annuity_functions.R:161, 172 · small_claims_future_annuities.R:311–315 · small_claims.R:613</p>
+
+## D.9 Rückversicherung {.finding .dark}
+
+<p class="kicker">RÜCKVERSICHERUNG · D.9</p>
+
+<div class="two-col">
+<div class="col">
+<h3>Wirkung</h3>
+<p><strong>E-F01 (hoch)</strong> lässt den XL-Anteil der IBNR-Zeilen in der Aggregation fehlen. Auf den Beispieldaten ist die Wirkung <strong>`r prozent(ef01_0_xl$Abweichung_prozent)`</strong>.</p>
+<p>Mit Priorität `r prio_text` ändert die Korrektur das zedierte XL um <strong>`r prozent(ef01_xl$Abweichung_prozent, 2)`</strong> und die Nettoreserve um <strong>`r prozent(ef01_net$Abweichung_prozent, 2)`</strong>.</p>
+<p><strong>E-F02 (hoch)</strong> ordnet die Quote über die Zeilenposition zu; im Permutationsfall betrifft das <strong>`r fmt(df03$Abweichung_prozent)` %</strong> der Anfalljahre.</p>
+</div>
+<div class="col">
+<h3>Nicht betroffen / Abweichung</h3>
+<p>Die Zusammenfassung von <code>sicr()</code> selbst ist nicht betroffen; nur die aggregierten Brutto-/Netto-Sichten weichen ab.</p>
+<p><strong>D.9.1 (abweichend):</strong> AAD/AAL sind nicht implementiert. Zusätzlich verankert C-F04 die Indexklausel ein Jahr zu früh, C-F02 betrifft nur die Ausgabewahl.</p>
+</div>
+</div>
+
+<p class="codeline">sicr.R:592 · aggregate_large_claims_results.R:181 · reinsurance.R:296 · xl_cashflow()</p>
+
+## D.10 Auswertung und Backtesting {.finding}
+
+<p class="kicker">BACKTESTING · D.10</p>
+
+<div class="two-col">
+<div class="col">
+<h3>Folge</h3>
+<p><strong>F-F01 (hoch)</strong> vergleicht nominale Prognosen mit auf das Indexjahr deflationierten Ist-Zahlungen. Im Vignetten-Backtesting ist der Bias-Faktor <strong>`r fmt(ff_summe$Faktor, 4)`</strong>; die Korrektur hebt den Ist-Wert um <strong>`r prozent(ff_prozent, 2)`</strong> an.</p>
+</div>
+<div class="col">
+<h3>Nicht betroffen</h3>
+<p>Die Backtesting-Struktur selbst entspricht dem Bericht: prognostizierte und tatsächliche Zahlung des ersten Folgejahres werden gegenübergestellt.</p>
+<p>Der Ultimate-Backtest (D.10.3) bleibt optional; das Paket implementiert ihn nicht.</p>
+</div>
+</div>
+
+<p class="codeline">plots.R:1239, 1466 · Ind_cl_payment_cal · plots.R:1209–1350</p>
+
+## Die übrigen Fehler {.fehler}
+
+<p class="kicker">ALLE FEHLER · NACH METHODENSCHRITT</p>
+
+```{r fehler_nach_schritt, fig.width = 10, fig.height = 5.4}
+grafik_fehler_nach_schritt(wurzel)
+```
+
+<p class="note">Das Bild zeigt alle `r nrow(fehler)` Fehler an ihrem Methodenschritt: `r sum(fehler$schwere == "hoch")` sind hoch, `r sum(fehler$schwere == "mittel")` mittel und `r sum(fehler$schwere == "niedrig")` niedrig. Leere Schritte bleiben sichtbar.</p>
+
+## Schneller bei gleichem Ergebnis {.benchmarks}
+
+<p class="kicker">VERBESSERUNGEN · BENCHMARKS</p>
+
+```{r benchmarks, fig.width = 10, fig.height = 5.2}
+grafik_benchmarks(wurzel, thema = theme_artefakt)
+```
+
+<p class="note">Jede der `r nrow(verb)` Verbesserungen hat einen Gleichheitstest gegen das Original; die Grafik zeigt die gemessenen Laufzeit-Spannen aus fünf Läufen.</p>
+
+## Empfehlungen {.empfehlungen}
+
+<p class="kicker">NACH WIRKUNG AUF DIE RESERVE</p>
+
+<ol class="empfehlungen">
+<li><strong>D-F07 zuerst beheben:</strong> Die künftigen Basisrenten dürfen nicht vom Indexjahr abhängen; bei zwei Indexjahren sind es `r prozent(df07$Abweichung_prozent)`.</li>
+<li><strong>A-F01 korrigieren:</strong> Ausreißergrenzen im Nachlauf vor der Hochskalierung anwenden; die Poolmasse verschiebt sich um `r prozent(a100$Abweichung_prozent, 2)` bei Grenzen 0 / 100 Tsd.</li>
+<li><strong>E-F01 in der Aggregation schließen:</strong> Den XL-Anteil der IBNR-Zeilen mitführen; bei Priorität `r prio_text` ändert sich die Nettoreserve um `r prozent(ef01_net$Abweichung_prozent, 2)`.</li>
+<li><strong>D-F01 altersrichtig stellen:</strong> Die Sterblichkeit bekannter Renten ab q(x+1) ansetzen; die undiskontierten Zahlungen ändern sich um `r prozent(df01$Abweichung_prozent, 2)`.</li>
+<li><strong>Positionszuordnung durch <code>match()</code> ersetzen:</strong> B-F01, C-F03, D-F03 und E-F02; bei B-F01 betrifft die Permutation `r fmt(bf01$Abweichung_prozent)` % der Jahre.</li>
+<li><strong>F-F01 im Backtesting korrigieren:</strong> Nominal gegen nominal vergleichen; im Vignettenfall hebt die Korrektur den Ist-Wert um `r prozent(ff_prozent, 2)`.</li>
+</ol>
+
+## Grenzen {.grenzen}
+
+<p class="kicker">EINORDNUNG</p>
+
+<ul class="grenzen">
+<li>Die Befunde gelten für sicr `r paket_version` (Commit `r paket_commit`); neuere Versionen wurden nicht geprüft.</li>
+<li>Die Fehlertests nutzen kleine konstruierte Eingaben. Wie stark ein Fehler auf eine echte Reserve wirkt, ist nur dort beziffert, wo <code>wirkung.csv</code> oder <code>f_f01_vignette.csv</code> Zahlen liefern.</li>
+<li>Die Permutationszahlen zu B-F01, C-F03 und D-F03/E-F02 hängen von der Zeilenreihenfolge ab; sie illustrieren den Mechanismus, sie sind keine festen Punktwerte.</li>
+<li>Die Korrekturen sind einzelne Funktionen zum Nachvollziehen, kein gepflegter Fork von sicr.</li>
+<li>Der DAV-Bericht liegt aus urheberrechtlichen Gründen nicht im Repo; zitiert wird mit Seitenzahl.</li>
+</ul>
+
+## Anhang · Belastbarkeit {.anhang}
+
+<p class="kicker">PRÜFRUNDEN · TESTS</p>
+
+<p class="note">Drei Prüfrunden – Audit, Gegenprüfung (oc1) und Nachprüfung (cl1) – bestätigen die Befunde; Einzelheiten stehen in <code>nachpruefung/bericht.md</code>.</p>
+
+```{r testmatrix, fig.width = 9, fig.height = 5.4}
+grafik_testmatrix_kompakt(wurzel, thema = theme_artefakt)
+```
+
+<p class="footer">github.com/56eli/aktuar2</p>

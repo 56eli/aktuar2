@@ -1,8 +1,8 @@
 #!/usr/bin/env Rscript
-# Rendert Bericht und Präsentation aus der Repo-Wurzel.
+# Rendert Bericht und Methoden-Artefakt aus der Repo-Wurzel.
 #   Rscript skripte/render.R
 # Der Bericht behält sein github_document-Format (bericht/bericht.md);
-# die Präsentation wird als selbstenthaltene HTML-Datei geschrieben.
+# das Artefakt wird als selbstenthaltene HTML-Datei geschrieben.
 
 root <- normalizePath(".", mustWork = TRUE)
 Sys.setenv(AKTUAR_ROOT = root)
@@ -24,12 +24,20 @@ render_datei <- function(rel, ausgabe) {
 }
 
 render_datei(file.path("bericht", "bericht.Rmd"), "bericht.md")
-render_datei(file.path("praesentation", "praesentation.Rmd"), "praesentation.html")
+render_datei(file.path("artefakt", "sicr_methode.Rmd"), "sicr_methode.html")
 
-# ioslides laedt MathJax immer von mathjax.rstudio.com nach, auch ohne Formeln. Die Folien
-# enthalten keine Formeln; der Lader wird entfernt, damit die HTML-Datei ohne Netz auskommt.
-html_pfad <- file.path("praesentation", "praesentation.html")
+# Das Artefakt muss ohne Netz auskommen: keine externen Skripte, Stile, Schriften
+# oder Bilder und kein MathJax-Lader.
+html_pfad <- file.path("artefakt", "sicr_methode.html")
 html <- paste(readLines(html_pfad, warn = FALSE, encoding = "UTF-8"), collapse = "\n")
-html <- sub("(?s)<!-- dynamically load mathjax[^\n]*\n<script>.*?</script>\n", "", html, perl = TRUE)
-if (grepl("mathjax.rstudio.com", html, fixed = TRUE)) stop("MathJax-Lader nicht entfernt")
-writeLines(html, html_pfad, useBytes = TRUE)
+link_tags <- regmatches(html, gregexpr("<link[^>]*>", html,
+                                       ignore.case = TRUE, perl = TRUE))[[1]]
+extern_url <- "(https?:)?//"
+extern <- grepl(paste0("(?i)\\bsrc\\s*=\\s*[\"']?", extern_url), html, perl = TRUE) ||
+   any(grepl(paste0("(?i)\\bhref\\s*=\\s*[\"']?", extern_url), link_tags, perl = TRUE)) ||
+   grepl("(?i)@import", html, perl = TRUE) ||
+   grepl(paste0("(?i)url\\(\\s*[\"']?", extern_url), html, perl = TRUE) ||
+   grepl("(?i)<script[^>]*mathjax", html, perl = TRUE)
+if (extern) {
+   stop("sicr_methode.html lädt externe Ressourcen oder MathJax", call. = FALSE)
+}
