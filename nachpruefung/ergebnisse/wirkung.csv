@@ -1,0 +1,18 @@
+ID,Groesse,Original,Korrigiert,Abweichung_prozent,Anmerkung
+A-F01,Nachlaufpoolmasse, Grenzen 0/1e+05,14937147.78309,15715052.86638,-4.9501,Summe der Ind_cl_payment_cal in pools[[2]]; generate_pools vs generate_pools_v
+A-F01,Nachlaufpoolmasse, Grenzen 0/250000,16981572.091902,17655484.928322,-3.817,Summe der Ind_cl_payment_cal in pools[[2]]; generate_pools vs generate_pools_v
+A-F01,Nachlaufpoolmasse, Grenzen 0/5e+05,17817847.431969,18350897.092611,-2.9048,Summe der Ind_cl_payment_cal in pools[[2]]; generate_pools vs generate_pools_v
+B-F01,Anteil Jahre mit falschem Index (%),20.382166,0,20.3822,permutierte historic_indices_xmpl, seed 42, 64 von 314 Jahren; Original gegen expand_historic_indices_v
+B-F01,Max. relative Indexabweichung (%),3979.528493,0,3979.5285,Maximum der relativen Abweichung je Kalenderjahr
+C-F03,Summe erwartete IBNR-Schaeden, permutierte Exposure,38.290098,43.852512,-12.6844,Summe der Matrix get_expected_ibnr_numbers; permutierte exposure_xmpl, seed 42; Modell aus get_additive_ibnr_model(large_claims_list, 2014:2023)
+D-F01,Undiskontierte Rentenzahlungen (Summe),9239437.166667,9070926.735635,1.8577,roll_out_annuity(payments, probs, "end_of_probs") = payments * (1 - probs); active_annuities_xmpl
+D-F03/E-F02,Anteil Anfalljahre mit falscher Quote (%),62.857143,0,62.8571,permutierte reinsurance_xmpl, seed 42, 22 von 35 Jahren; Zeilenposition gegen match(Origin_year)
+D-F03/E-F02,Max. Quotenabweichung (Prozentpunkte),50,0,50,Maximum |Quota_share_original - Quota_share_korrigiert| in Prozentpunkten
+D-F07,Kuenftige Basisrenten, Indexjahr 2022 gegen 2018,196500.059157,219891.984846,-10.6379,Originalfunktion mit zwei Indexjahren, gleiche Indexreihe; Summe der 250 Zukunftsspalten. _v: 2022=182531.88, 2018=182531.88 (Differenz 0 %)
+D-F07,Kuenftige Basisrenten, Original gegen Korrektur (Indexjahr 2022),196500.059157,182531.878409,7.6525,generate_small_claims_future_annuities vs _v; gleiches Indexjahr 2022
+E-F01,Nettoreserve Grossschaden, Beispielprioritaeten,75574006.053666,75574006.053666,0,n=1, seed=12345; Brutto - XL - Quote im Grossschadenaggregat; Original gegen aggregate_large_claims_results_v
+E-F01,Zediertes XL Grossschaden, Beispielprioritaeten,7306240.645016,7306240.645016,0,Summe large_ceded_xl_payments, Zukunftsspalten (250)
+E-F01,Nettoreserve Grossschaden, Prioritaet 500000,60363274.969908,58658624.929412,2.9061,n=1, seed=12345; Brutto - XL - Quote im Grossschadenaggregat; Original gegen aggregate_large_claims_results_v
+E-F01,Zediertes XL Grossschaden, Prioritaet 500000,22516971.728774,24221621.769269,-7.0377,Summe large_ceded_xl_payments, Zukunftsspalten (250)
+F-F01,Verzerrung 1. Folgejahr, Faktor nominal/deflationiert,1.059464,1,5.9464,Transition_factor[2023]/Transition_factor[2022]; Korrektur vergleicht nominal, Faktor 1
+F-F01,Verzerrung nach 5 Jahren, Faktor nominal/deflationiert,1.192436,1,19.2436,Transition_factor[2027]/Transition_factor[2022]; Korrektur vergleicht nominal, Faktor 1

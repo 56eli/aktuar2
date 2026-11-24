@@ -1,0 +1,13 @@
+ID,Mutation,Test_original,Test_mutant,Urteil
+A-V01,Nachlaufzeile bekommt ein Abwicklungsjahr zu viel,gruen,rot,diskriminiert
+A-V02,Poolgroesse sample_size um eins zu gross,gruen,rot,diskriminiert
+B-V01,Nenner des linearen Nachlaufs um eins zu klein,gruen,rot,diskriminiert
+B-V02,Diagonale des Abwicklungsdreiecks verschoben,gruen,rot,diskriminiert
+C-V01,erste Poolzeile vergessen,gruen,rot,diskriminiert
+C-V02,Dev_year_since_large um eins zu gross,gruen,rot,diskriminiert
+D-V01,Rentenzahlungen um eine Spalte verschoben,gruen,rot,diskriminiert
+D-V02,erste Folgejahreszahlung um eins erhoeht,gruen,rot,diskriminiert
+E-V01,Rueckgabe von indices_ok_v invertiert,gruen,rot,diskriminiert
+E-V02,Rueckgabe von exposure_ok_v invertiert,gruen,rot,diskriminiert
+F-V01,eine Beobachtung im ersten Poolplot zu viel,gruen,rot,diskriminiert
+F-V02,ein Wert im ersten Reservenplot verschoben,gruen,rot,diskriminiert
