@@ -1,0 +1,10 @@
+## C-F04 patch gepatcht=generate_xl_indices_per_claim
+C-F04: 1...
+
+══ Failed ══════════════════════════════════════════════════════════════════════
+── 1. Failure ('test-C-F04.R:73:4'): C-F04: Indexklausel greift schon im Basisja
+xl_cashflow_mit_indices(indices, history_2015) not equal to 80000.
+1/1 mismatches
+[1] 1e+05 - 80000 == 20000
+
+══ DONE ════════════════════════════════════════════════════════════════════════

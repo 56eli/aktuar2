@@ -1,0 +1,16 @@
+## E-F07 mutant gepatcht=reinsurance_ok
+E-F07: 1Column Limit is missing.
+..
+
+══ Failed ══════════════════════════════════════════════════════════════════════
+── 1. Error ('test-E-F07.R:17:4'): E-F07: reinsurance_ok prueft die Spalte Limit
+Error: MUTANT: reinsurance_ok
+Backtrace:
+    ▆
+ 1. ├─testthat::expect_true(...) at test-E-F07.R:17:4
+ 2. │ └─testthat::quasi_label(enquo(object), label, arg = "object")
+ 3. │   └─rlang::eval_bare(expr, quo_get_env(quo))
+ 4. └─reinsurance_ok(reinsurance_bad, indices_xmpl, 1989, 2023)
+
+══ DONE ════════════════════════════════════════════════════════════════════════
+No one is perfect!

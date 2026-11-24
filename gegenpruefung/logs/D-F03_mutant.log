@@ -1,0 +1,22 @@
+## D-F03 mutant gepatcht=compute_small_claims
+D-F03: 12
+
+══ Failed ══════════════════════════════════════════════════════════════════════
+── 1. Error ('test-D-F03.R:45:4'): D-F03: Quota-Share wird positionsabhaengig st
+Error: MUTANT: compute_small_claims
+Backtrace:
+    ▆
+ 1. ├─base::do.call(compute_small_claims, inputs) at test-D-F03.R:45:4
+ 2. └─`<fn>`(...)
+
+── 2. Error ('test-D-F03.R:65:4'): D-F03: Korrektur ordnet die Quote dem richtig
+Error: MUTANT: compute_small_claims
+Backtrace:
+    ▆
+ 1. ├─base::do.call(compute_small_claims_v, inputs) at test-D-F03.R:65:4
+ 2. └─global `<fn>`(...)
+ 3.   ├─base::do.call(sicr::compute_small_claims, c(args, list(reinsurance = reinsurance)))
+ 4.   └─`<fn>`(...)
+
+══ DONE ════════════════════════════════════════════════════════════════════════
+Frustration is a natural part of programming :)

@@ -1,0 +1,9 @@
+## B-F04 patch gepatcht=cum2inc
+B-F04: 1....
+
+══ Failed ══════════════════════════════════════════════════════════════════════
+── 1. Failure ('test-B-F04.R:5:4'): B-F04 cum2inc liefert fuer einen leeren Vekt
+cum2inc(numeric(0)) not equal to NA_real_.
+Lengths differ: 0 is not 1
+
+══ DONE ════════════════════════════════════════════════════════════════════════

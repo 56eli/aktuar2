@@ -1,0 +1,11 @@
+## D-F02 patch gepatcht=compute_small_claims
+D-F02: 1....
+
+══ Failed ══════════════════════════════════════════════════════════════════════
+── 1. Failure ('test-D-F02.R:51:4'): D-F02: compute_small_claims liefert ohne RV
+isTRUE(...) is not FALSE
+
+`actual`:   TRUE 
+`expected`: FALSE
+
+══ DONE ════════════════════════════════════════════════════════════════════════

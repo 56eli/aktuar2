@@ -1,0 +1,14 @@
+## E-F04 patch gepatcht=indices_ok
+E-F04: Column Index_re is missing.
+1Column Index_re is missing.
+..
+
+══ Failed ══════════════════════════════════════════════════════════════════════
+── 1. Failure ('test-E-F04.R:13:4'): E-F04: indices_ok prueft die Spaltenstruktu
+indices_ok(indices_bad, 1989, 2023) is not TRUE
+
+`actual`:   FALSE
+`expected`: TRUE 
+
+══ DONE ════════════════════════════════════════════════════════════════════════
+I believe in you!

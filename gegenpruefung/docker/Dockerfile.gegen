@@ -1,0 +1,4 @@
+# Gegenprüfung: Textwerkzeuge für den DAV-Bericht, auf demselben R-Image
+FROM aktuar-r:1
+RUN apt-get update && apt-get install -y --no-install-recommends poppler-utils \
+    && rm -rf /var/lib/apt/lists/*

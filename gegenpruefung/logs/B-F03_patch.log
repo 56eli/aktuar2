@@ -1,0 +1,8 @@
+## B-F03 patch gepatcht=inc2cum
+B-F03: 1..
+
+══ Failed ══════════════════════════════════════════════════════════════════════
+── 1. Failure ('test-B-F03.R:7:4'): B-F03 inc2cum stuerzt bei einer leeren Matri
+`inc2cum(empty_triangle)` did not throw an error.
+
+══ DONE ════════════════════════════════════════════════════════════════════════

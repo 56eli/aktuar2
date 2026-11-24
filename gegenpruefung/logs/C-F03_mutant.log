@@ -1,0 +1,20 @@
+## C-F03 mutant gepatcht=get_expected_ibnr_numbers
+C-F03: 12
+
+══ Failed ══════════════════════════════════════════════════════════════════════
+── 1. Error ('test-C-F03.R:23:4'): C-F03: unsortierte exposure wird falsch zugeo
+Error: MUTANT: get_expected_ibnr_numbers
+Backtrace:
+    ▆
+ 1. └─get_expected_ibnr_numbers(add_mod, exposure_sorted) at test-C-F03.R:23:4
+
+── 2. Error ('test-C-F03.R:38:4'): C-F03: Korrektur ist unabhaengig von der Zeil
+Error: MUTANT: get_expected_ibnr_numbers
+Backtrace:
+    ▆
+ 1. ├─testthat::expect_equal(...) at test-C-F03.R:38:4
+ 2. │ └─testthat::quasi_label(enquo(expected), expected.label, arg = "expected")
+ 3. │   └─rlang::eval_bare(expr, quo_get_env(quo))
+ 4. └─get_expected_ibnr_numbers(add_mod, exposure_sorted)
+
+══ DONE ════════════════════════════════════════════════════════════════════════

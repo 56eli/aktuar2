@@ -1,0 +1,12 @@
+## A-F02 mutant gepatcht=generate_pools+pools2matrix
+A-F02: 1........
+
+══ Failed ══════════════════════════════════════════════════════════════════════
+── 1. Error ('test-A-F02.R:36:4'): A-F02: start_of_tail = 2 erzeugt falsche Pret
+Error: MUTANT: generate_pools
+Backtrace:
+    ▆
+ 1. ├─base::do.call(generate_pools, args_pools) at test-A-F02.R:36:4
+ 2. └─`<fn>`(...)
+
+══ DONE ════════════════════════════════════════════════════════════════════════

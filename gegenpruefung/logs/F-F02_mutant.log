@@ -1,0 +1,12 @@
+## F-F02 mutant gepatcht=backtesting_1y_single_per_dev_year
+F-F02: 1.
+
+══ Failed ══════════════════════════════════════════════════════════════════════
+── 1. Error ('test-F-F02.R:32:4'): F-F02: Legende im Einzelschaden-Backtesting i
+Error: MUTANT: backtesting_1y_single_per_dev_year
+Backtrace:
+    ▆
+ 1. └─backtesting_1y_single_per_dev_year(...) at test-F-F02.R:32:4
+
+══ DONE ════════════════════════════════════════════════════════════════════════
+Keep trying!

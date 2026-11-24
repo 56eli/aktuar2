@@ -1,0 +1,18 @@
+## D-F01 mutant gepatcht=generate_annuity_probabilities
+D-F01: 12
+
+══ Failed ══════════════════════════════════════════════════════════════════════
+── 1. Error ('test-D-F01.R:36:4'): D-F01: sicr bewertet die Zahlung 2025 mit q(5
+Error: MUTANT: generate_annuity_probabilities
+Backtrace:
+    ▆
+ 1. └─generate_annuity_probabilities(...) at test-D-F01.R:36:4
+
+── 2. Error ('test-D-F01.R:49:4'): D-F01: Korrektur rechnet für bekannte Renten 
+Error: MUTANT: generate_annuity_probabilities
+Backtrace:
+    ▆
+ 1. └─global generate_annuity_probabilities_v(...) at test-D-F01.R:49:4
+ 2.   └─sicr::generate_annuity_probabilities(...)
+
+══ DONE ════════════════════════════════════════════════════════════════════════

@@ -1,0 +1,22 @@
+## C-F01 mutant gepatcht=roll_out_single_claim
+C-F01: 12
+
+══ Failed ══════════════════════════════════════════════════════════════════════
+── 1. Error ('test-C-F01.R:14:4'): C-F01: ungueltiger 'type' liefert still einen
+Error: MUTANT: roll_out_single_claim
+Backtrace:
+    ▆
+ 1. ├─base::suppressWarnings(...) at test-C-F01.R:14:4
+ 2. │ └─base::withCallingHandlers(...)
+ 3. └─roll_out_single_claim(reserve = 1000, years = 5, type = "quadratic")
+
+── 2. Error ('test-C-F01.R:26:4'): C-F01: Korrektur setzt 'type' wie dokumentier
+Error: MUTANT: roll_out_single_claim
+Backtrace:
+    ▆
+ 1. ├─testthat::expect_equal(...) at test-C-F01.R:26:4
+ 2. │ └─testthat::quasi_label(enquo(expected), expected.label, arg = "expected")
+ 3. │   └─rlang::eval_bare(expr, quo_get_env(quo))
+ 4. └─roll_out_single_claim(reserve = 1000, years = 5, type = "linear")
+
+══ DONE ════════════════════════════════════════════════════════════════════════

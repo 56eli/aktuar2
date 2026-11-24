@@ -1,0 +1,33 @@
+## B-F01 mutant gepatcht=expand_historic_indices
+B-F01: .1.2..3
+
+══ Failed ══════════════════════════════════════════════════════════════════════
+── 1. Error ('test-B-F01.R:8:4'): B-F01 expand_historic_indices ordnet Index_gro
+Error: MUTANT: expand_historic_indices
+Backtrace:
+    ▆
+ 1. └─expand_historic_indices(historic, first_orig_year = 2020, last_orig_year = 2022) at test-B-F01.R:8:4
+
+── 2. Failure ('test-B-F01.R:25:4'): B-F01 expand_historic_indices stuerzt bei L
+`expand_historic_indices(historic, first_orig_year = 2020, last_orig_year = 2022)` threw an error with unexpected message.
+Expected match: "differing number of rows"
+Actual message: "MUTANT: expand_historic_indices"
+Backtrace:
+    ▆
+ 1. ├─testthat::expect_error(...) at test-B-F01.R:25:4
+ 2. │ └─testthat:::quasi_capture(...)
+ 3. │   ├─testthat (local) .capture(...)
+ 4. │   │ └─base::withCallingHandlers(...)
+ 5. │   └─rlang::eval_bare(quo_get_expr(.quo), quo_get_env(.quo))
+ 6. └─expand_historic_indices(historic, first_orig_year = 2020, last_orig_year = 2022)
+
+── 3. Error ('test-B-F01.R:44:4'): B-F01 Korrektur expand_historic_indices_v sor
+Error: MUTANT: expand_historic_indices
+Backtrace:
+    ▆
+ 1. ├─testthat::expect_equal(...) at test-B-F01.R:44:4
+ 2. │ └─testthat::quasi_label(enquo(expected), expected.label, arg = "expected")
+ 3. │   └─rlang::eval_bare(expr, quo_get_env(quo))
+ 4. └─expand_historic_indices(historic_sorted, 2020, 2022)
+
+══ DONE ════════════════════════════════════════════════════════════════════════
