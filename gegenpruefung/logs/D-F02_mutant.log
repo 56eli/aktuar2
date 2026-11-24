@@ -1,0 +1,21 @@
+## D-F02 mutant gepatcht=compute_small_claims
+D-F02: 12
+
+══ Failed ══════════════════════════════════════════════════════════════════════
+── 1. Error ('test-D-F02.R:45:4'): D-F02: compute_small_claims liefert ohne RV-P
+Error: MUTANT: compute_small_claims
+Backtrace:
+    ▆
+ 1. ├─base::do.call(compute_small_claims, inputs) at test-D-F02.R:45:4
+ 2. └─`<fn>`(...)
+
+── 2. Error ('test-D-F02.R:59:4'): D-F02: Korrektur liefert die dokumentierte Nu
+Error: MUTANT: compute_small_claims
+Backtrace:
+    ▆
+ 1. ├─base::do.call(compute_small_claims_v, inputs) at test-D-F02.R:59:4
+ 2. └─global `<fn>`(...)
+ 3.   ├─base::do.call(sicr::compute_small_claims, c(args, list(reinsurance = reinsurance)))
+ 4.   └─`<fn>`(...)
+
+══ DONE ════════════════════════════════════════════════════════════════════════

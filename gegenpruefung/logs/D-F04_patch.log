@@ -1,0 +1,8 @@
+## D-F04 patch gepatcht=generate_pattern
+D-F04: 1...
+
+══ Failed ══════════════════════════════════════════════════════════════════════
+── 1. Failure ('test-D-F04.R:9:4'): D-F04: generate_pattern bricht bei einem ein
+`suppressWarnings(generate_pattern(triangle))` did not throw an error.
+
+══ DONE ════════════════════════════════════════════════════════════════════════

@@ -1,0 +1,18 @@
+## E-F03 mutant gepatcht=aggregate_large_claims_results
+E-F03: 1....
+
+══ Failed ══════════════════════════════════════════════════════════════════════
+── 1. Failure ('test-E-F03.R:43:4'): E-F03: leere Liste bekannter Grossschaeden 
+`aggregate_large_claims_results(...)` threw an error with unexpected message.
+Expected match: "cashflow must have same number of rows"
+Actual message: "MUTANT: aggregate_large_claims_results"
+Backtrace:
+    ▆
+ 1. ├─testthat::expect_error(...) at test-E-F03.R:43:4
+ 2. │ └─testthat:::quasi_capture(...)
+ 3. │   ├─testthat (local) .capture(...)
+ 4. │   │ └─base::withCallingHandlers(...)
+ 5. │   └─rlang::eval_bare(quo_get_expr(.quo), quo_get_env(.quo))
+ 6. └─aggregate_large_claims_results(...)
+
+══ DONE ════════════════════════════════════════════════════════════════════════

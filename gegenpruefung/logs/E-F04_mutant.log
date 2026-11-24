@@ -1,0 +1,15 @@
+## E-F04 mutant gepatcht=indices_ok
+E-F04: 1Column Index_re is missing.
+..
+
+══ Failed ══════════════════════════════════════════════════════════════════════
+── 1. Error ('test-E-F04.R:13:4'): E-F04: indices_ok prueft die Spaltenstruktur 
+Error: MUTANT: indices_ok
+Backtrace:
+    ▆
+ 1. ├─testthat::expect_true(indices_ok(indices_bad, 1989, 2023)) at test-E-F04.R:13:4
+ 2. │ └─testthat::quasi_label(enquo(object), label, arg = "object")
+ 3. │   └─rlang::eval_bare(expr, quo_get_env(quo))
+ 4. └─indices_ok(indices_bad, 1989, 2023)
+
+══ DONE ════════════════════════════════════════════════════════════════════════

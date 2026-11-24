@@ -1,0 +1,21 @@
+## D-F03 patch gepatcht=compute_small_claims
+D-F03: 12.
+
+══ Failed ══════════════════════════════════════════════════════════════════════
+── 1. Failure ('test-D-F03.R:54:4'): D-F03: Quota-Share wird positionsabhaengig 
+result$small_ceded_quota_payments not equal to gross * c(0.3, 0.2, 0.1).
+6/759 mismatches (average diff: 28.6)
+[1]  10.0 - 30.0 == -20.0
+[4]  11.0 - 33.0 == -22.0
+[7]  13.0 - 39.0 == -26.0
+[9]  45.0 - 15.0 ==  30.0
+[12] 51.1 - 17.0 ==  34.1
+[15] 59.5 - 19.8 ==  39.7
+
+── 2. Failure ('test-D-F03.R:57:4'): D-F03: Quota-Share wird positionsabhaengig 
+isTRUE(...) is not FALSE
+
+`actual`:   TRUE 
+`expected`: FALSE
+
+══ DONE ════════════════════════════════════════════════════════════════════════

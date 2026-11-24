@@ -1,0 +1,13 @@
+## E-F07 patch gepatcht=reinsurance_ok
+E-F07: Column Limit is missing.
+1Column Limit is missing.
+..
+
+══ Failed ══════════════════════════════════════════════════════════════════════
+── 1. Failure ('test-E-F07.R:17:4'): E-F07: reinsurance_ok prueft die Spalte Lim
+reinsurance_ok(reinsurance_bad, indices_xmpl, 1989, 2023) is not TRUE
+
+`actual`:   FALSE
+`expected`: TRUE 
+
+══ DONE ════════════════════════════════════════════════════════════════════════

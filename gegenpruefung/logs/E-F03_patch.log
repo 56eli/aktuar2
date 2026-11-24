@@ -1,0 +1,9 @@
+## E-F03 patch gepatcht=aggregate_large_claims_results
+E-F03: 1....
+
+══ Failed ══════════════════════════════════════════════════════════════════════
+── 1. Failure ('test-E-F03.R:43:4'): E-F03: leere Liste bekannter Grossschaeden 
+`aggregate_large_claims_results(...)` did not throw an error.
+
+══ DONE ════════════════════════════════════════════════════════════════════════
+No one gets it right on their first try

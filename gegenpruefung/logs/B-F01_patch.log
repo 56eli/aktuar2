@@ -1,0 +1,28 @@
+## B-F01 patch gepatcht=expand_historic_indices
+B-F01: .12.3....
+
+══ Failed ══════════════════════════════════════════════════════════════════════
+── 1. Failure ('test-B-F01.R:14:4'): B-F01 expand_historic_indices ordnet Index_
+expanded$Index_gross[expanded$Calendar_year == 2020] not equal to 0.02.
+1/1 mismatches
+[1] 0.05 - 0.02 == 0.03
+
+── 2. Failure ('test-B-F01.R:15:4'): B-F01 expand_historic_indices ordnet Index_
+expanded$Index_gross[expanded$Calendar_year == 2021] not equal to 0.05.
+1/1 mismatches
+[1] 0.02 - 0.05 == -0.03
+
+── 3. Failure ('test-B-F01.R:25:4'): B-F01 expand_historic_indices stuerzt bei L
+`expand_historic_indices(historic, first_orig_year = 2020, last_orig_year = 2022)` threw an error with unexpected message.
+Expected match: "differing number of rows"
+Actual message: "historic_indices must contain consecutive calendar years without gaps"
+Backtrace:
+    ▆
+ 1. ├─testthat::expect_error(...) at test-B-F01.R:25:4
+ 2. │ └─testthat:::quasi_capture(...)
+ 3. │   ├─testthat (local) .capture(...)
+ 4. │   │ └─base::withCallingHandlers(...)
+ 5. │   └─rlang::eval_bare(quo_get_expr(.quo), quo_get_env(.quo))
+ 6. └─sicr::expand_historic_indices(...)
+
+══ DONE ════════════════════════════════════════════════════════════════════════

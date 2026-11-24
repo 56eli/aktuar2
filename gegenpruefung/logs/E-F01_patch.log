@@ -1,0 +1,15 @@
+## E-F01 patch gepatcht=aggregate_large_claims_results
+E-F01: 1.2.
+
+══ Failed ══════════════════════════════════════════════════════════════════════
+── 1. Failure ('test-E-F01.R:83:4'): E-F01: XL-Anteil der IBNR-Spaetgrossschaede
+unname(result$large_ceded_xl_payments["2021", "2022"]) not equal to 0.
+1/1 mismatches
+[1] 200 - 0 == 200
+
+── 2. Failure ('test-E-F01.R:107:4'): E-F01: Korrektur nimmt den XL-Anteil der I
+unname(result$large_ceded_xl_payments["2021", "2022"]) not equal to 200.
+1/1 mismatches
+[1] 400 - 200 == 200
+
+══ DONE ════════════════════════════════════════════════════════════════════════

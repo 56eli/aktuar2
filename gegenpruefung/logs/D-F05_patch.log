@@ -1,0 +1,8 @@
+## D-F05 patch gepatcht=fill_up_triangle
+D-F05: 1....
+
+══ Failed ══════════════════════════════════════════════════════════════════════
+── 1. Failure ('test-D-F05.R:8:4'): D-F05: fill_up_triangle bricht bei einem ein
+`fill_up_triangle(triangle, pattern = c(1.1))` did not throw an error.
+
+══ DONE ════════════════════════════════════════════════════════════════════════

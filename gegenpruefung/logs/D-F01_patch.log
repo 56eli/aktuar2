@@ -1,0 +1,11 @@
+## D-F01 patch gepatcht=generate_annuity_probabilities
+D-F01: .1..
+
+══ Failed ══════════════════════════════════════════════════════════════════════
+── 1. Failure ('test-D-F01.R:42:4'): D-F01: sicr bewertet die Zahlung 2025 mit q
+rolled[1, 2] not equal to 0.
+1/1 mismatches
+[1] 1000 - 0 == 1000
+
+══ DONE ════════════════════════════════════════════════════════════════════════
+Frustration is a natural part of programming :)

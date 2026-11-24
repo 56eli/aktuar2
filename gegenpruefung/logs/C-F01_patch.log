@@ -1,0 +1,10 @@
+## C-F01 patch gepatcht=roll_out_single_claim
+C-F01: .1...
+
+══ Failed ══════════════════════════════════════════════════════════════════════
+── 1. Failure ('test-C-F01.R:18:4'): C-F01: ungueltiger 'type' liefert still ein
+sum(result) not equal to 0.
+1/1 mismatches
+[1] 1000 - 0 == 1000
+
+══ DONE ════════════════════════════════════════════════════════════════════════

@@ -1,0 +1,11 @@
+## F-F03 mutant gepatcht=backtesting_multiyears
+F-F03: 1.
+
+══ Failed ══════════════════════════════════════════════════════════════════════
+── 1. Error ('test-F-F03.R:27:4'): F-F03: Mehrjahres-Backtesting erfindet ohne F
+Error: MUTANT: backtesting_multiyears
+Backtrace:
+    ▆
+ 1. └─backtesting_multiyears(...) at test-F-F03.R:27:4
+
+══ DONE ════════════════════════════════════════════════════════════════════════

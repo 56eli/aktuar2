@@ -1,0 +1,12 @@
+## D-F07 patch gepatcht=generate_small_claims_future_annuities
+D-F07: .1..
+
+══ Failed ══════════════════════════════════════════════════════════════════════
+── 1. Failure ('test-D-F07.R:83:4'): D-F07: zukuenftige Basis-Renten haengen vom
+`result_2021` not equal to result_2020/1.02.
+3/504 mismatches (average diff: 26.3)
+[6]  1340 - 1314 == 26.3
+[8]  1340 - 1314 == 26.3
+[10] 1340 - 1314 == 26.3
+
+══ DONE ════════════════════════════════════════════════════════════════════════

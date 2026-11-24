@@ -1,0 +1,11 @@
+## D-F07 mutant gepatcht=generate_small_claims_future_annuities
+D-F07: 1..
+
+══ Failed ══════════════════════════════════════════════════════════════════════
+── 1. Error ('test-D-F07.R:74:4'): D-F07: zukuenftige Basis-Renten haengen vom w
+Error: MUTANT: generate_small_claims_future_annuities
+Backtrace:
+    ▆
+ 1. └─generate_small_claims_future_annuities(...) at test-D-F07.R:74:4
+
+══ DONE ════════════════════════════════════════════════════════════════════════

@@ -1,0 +1,12 @@
+## A-F01 mutant gepatcht=generate_pools
+A-F01: 1.
+
+══ Failed ══════════════════════════════════════════════════════════════════════
+── 1. Error ('test-A-F01.R:36:4'): A-F01: Nachlauf-Grenzen wirken auf dem falsch
+Error: MUTANT: generate_pools
+Backtrace:
+    ▆
+ 1. ├─base::do.call(...) at test-A-F01.R:36:4
+ 2. └─`<fn>`(...)
+
+══ DONE ════════════════════════════════════════════════════════════════════════
