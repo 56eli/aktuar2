@@ -1,0 +1,11 @@
+## A-F01 patch gepatcht=generate_pools
+A-F01: .1.
+
+══ Failed ══════════════════════════════════════════════════════════════════════
+── 1. Failure ('test-A-F01.R:48:4'): A-F01: Nachlauf-Grenzen wirken auf dem fals
+pools_limited[[2]][[1]]$Ind_cl_payment_cal not equal to c(1000, -500).
+2/2 mismatches (average diff: 24750)
+[1]  34000 - 1000 ==  33000
+[2] -17000 - -500 == -16500
+
+══ DONE ════════════════════════════════════════════════════════════════════════

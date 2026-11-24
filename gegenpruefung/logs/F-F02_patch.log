@@ -1,0 +1,14 @@
+## F-F02 patch gepatcht=backtesting_1y_single_per_dev_year
+F-F02: 1.
+
+══ Failed ══════════════════════════════════════════════════════════════════════
+── 1. Failure ('test-F-F02.R:40:4'): F-F02: Legende im Einzelschaden-Backtesting
+unname(labels[c("Q75", "Q90", "Q99")]) not equal to c("1% - 99% Quantil", "10% - 90% Quantil", "25% - 75% Quantil").
+2/3 mismatches
+x[1]: "25% - 75% Quantil"
+y[1]: "1% - 99% Quantil"
+
+x[3]: "1% - 99% Quantil"
+y[3]: "25% - 75% Quantil"
+
+══ DONE ════════════════════════════════════════════════════════════════════════

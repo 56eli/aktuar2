@@ -1,0 +1,18 @@
+## E-F01 mutant gepatcht=aggregate_large_claims_results
+E-F01: 12
+
+══ Failed ══════════════════════════════════════════════════════════════════════
+── 1. Error ('test-E-F01.R:70:4'): E-F01: XL-Anteil der IBNR-Spaetgrossschaeden 
+Error: MUTANT: aggregate_large_claims_results
+Backtrace:
+    ▆
+ 1. └─aggregate_large_claims_results(...) at test-E-F01.R:70:4
+
+── 2. Error ('test-E-F01.R:98:4'): E-F01: Korrektur nimmt den XL-Anteil der IBNR
+Error: MUTANT: aggregate_large_claims_results
+Backtrace:
+    ▆
+ 1. └─aggregate_large_claims_results_v(...) at test-E-F01.R:98:4
+ 2.   └─aggregate_large_claims_results(...)
+
+══ DONE ════════════════════════════════════════════════════════════════════════

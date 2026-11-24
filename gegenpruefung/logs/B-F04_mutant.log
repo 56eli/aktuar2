@@ -1,0 +1,23 @@
+## B-F04 mutant gepatcht=cum2inc
+B-F04: 1..2
+
+══ Failed ══════════════════════════════════════════════════════════════════════
+── 1. Error ('test-B-F04.R:5:4'): B-F04 cum2inc liefert fuer einen leeren Vektor
+Error: MUTANT: cum2inc
+Backtrace:
+    ▆
+ 1. ├─testthat::expect_equal(cum2inc(numeric(0)), NA_real_) at test-B-F04.R:5:4
+ 2. │ └─testthat::quasi_label(enquo(object), label, arg = "object")
+ 3. │   └─rlang::eval_bare(expr, quo_get_env(quo))
+ 4. └─cum2inc(numeric(0))
+
+── 2. Error ('test-B-F04.R:18:4'): B-F04 Korrektur cum2inc_v behandelt leere Ein
+Error: MUTANT: cum2inc
+Backtrace:
+    ▆
+ 1. ├─testthat::expect_equal(cum2inc_v(cum_triangle), cum2inc(cum_triangle)) at test-B-F04.R:18:4
+ 2. │ └─testthat::quasi_label(enquo(expected), expected.label, arg = "expected")
+ 3. │   └─rlang::eval_bare(expr, quo_get_env(quo))
+ 4. └─cum2inc(cum_triangle)
+
+══ DONE ════════════════════════════════════════════════════════════════════════

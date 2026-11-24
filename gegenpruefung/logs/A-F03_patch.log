@@ -1,0 +1,16 @@
+## A-F03 patch gepatcht=sicr
+A-F03: .12....
+
+══ Failed ══════════════════════════════════════════════════════════════════════
+── 1. Failure ('test-A-F03.R:100:4'): A-F03: Zukunftsindex haengt von max(indice
+unname(result_extra[1, 1, "Claim_payments"]) not equal to 1000 * 1.01^2.
+1/1 mismatches
+[1] 1010 - 1020 == -10.1
+
+── 2. Failure ('test-A-F03.R:103:4'): A-F03: Zukunftsindex haengt von max(indice
+isTRUE(...) is not FALSE
+
+`actual`:   TRUE 
+`expected`: FALSE
+
+══ DONE ════════════════════════════════════════════════════════════════════════

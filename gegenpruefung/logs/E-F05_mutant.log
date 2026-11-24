@@ -1,0 +1,15 @@
+## E-F05 mutant gepatcht=indices_ok
+E-F05: 1indices must not be NULL..indices must not be NULL..
+
+══ Failed ══════════════════════════════════════════════════════════════════════
+── 1. Error ('test-E-F05.R:9:4'): E-F05: indices_ok gibt fuer NULL den Character
+Error: MUTANT: indices_ok
+Backtrace:
+    ▆
+ 1. ├─testthat::expect_identical(indices_ok(NULL, 1989, 2023), "FALSE") at test-E-F05.R:9:4
+ 2. │ └─testthat::quasi_label(enquo(object), label, arg = "object")
+ 3. │   └─rlang::eval_bare(expr, quo_get_env(quo))
+ 4. └─indices_ok(NULL, 1989, 2023)
+
+══ DONE ════════════════════════════════════════════════════════════════════════
+Frustration is a natural part of programming :)

@@ -1,0 +1,27 @@
+## D-F05 mutant gepatcht=fill_up_triangle
+D-F05: 1..2
+
+══ Failed ══════════════════════════════════════════════════════════════════════
+── 1. Failure ('test-D-F05.R:8:4'): D-F05: fill_up_triangle bricht bei einem ein
+`fill_up_triangle(triangle, pattern = c(1.1))` threw an error with unexpected message.
+Expected match: "subscript out of bounds"
+Actual message: "MUTANT: fill_up_triangle"
+Backtrace:
+    ▆
+ 1. ├─testthat::expect_error(...) at test-D-F05.R:8:4
+ 2. │ └─testthat:::quasi_capture(...)
+ 3. │   ├─testthat (local) .capture(...)
+ 4. │   │ └─base::withCallingHandlers(...)
+ 5. │   └─rlang::eval_bare(quo_get_expr(.quo), quo_get_env(.quo))
+ 6. └─fill_up_triangle(triangle, pattern = c(1.1))
+
+── 2. Error ('test-D-F05.R:22:4'): D-F05: Korrektur fuellt auch ein einspaltiges
+Error: MUTANT: fill_up_triangle
+Backtrace:
+    ▆
+ 1. ├─testthat::expect_equal(...) at test-D-F05.R:22:4
+ 2. │ └─testthat::quasi_label(enquo(expected), expected.label, arg = "expected")
+ 3. │   └─rlang::eval_bare(expr, quo_get_env(quo))
+ 4. └─fill_up_triangle(triangle, pattern)
+
+══ DONE ════════════════════════════════════════════════════════════════════════

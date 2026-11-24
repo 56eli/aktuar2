@@ -1,0 +1,13 @@
+## E-F06 patch gepatcht=mortality_ok
+E-F06: At least one Probability in mortality is not between 0 and 1.
+1At least one Probability in mortality is not between 0 and 1.
+...
+
+══ Failed ══════════════════════════════════════════════════════════════════════
+── 1. Failure ('test-E-F06.R:13:4'): E-F06: mortality_ok prueft die Wahrscheinli
+mortality_ok(mortality_bad) is not TRUE
+
+`actual`:   FALSE
+`expected`: TRUE 
+
+══ DONE ════════════════════════════════════════════════════════════════════════

@@ -1,0 +1,20 @@
+## A-F02 patch gepatcht=generate_pools+pools2matrix
+A-F02: 123........
+
+══ Failed ══════════════════════════════════════════════════════════════════════
+── 1. Failure ('test-A-F02.R:39:4'): A-F02: start_of_tail = 2 erzeugt falsche Pr
+pools[[1]][[1]] has length 0, not length 2.
+
+── 2. Failure ('test-A-F02.R:40:4'): A-F02: start_of_tail = 2 erzeugt falsche Pr
+pools[[1]][[2]] has length 0, not length 2.
+
+── 3. Error ('test-A-F02.R:41:4'): A-F02: start_of_tail = 2 erzeugt falsche Pret
+<subscriptOutOfBoundsError/error/condition>
+Error in `pools[[1]][[1]][[1]]`: subscript out of bounds
+Backtrace:
+    ▆
+ 1. └─testthat::expect_equal(...) at test-A-F02.R:41:4
+ 2.   └─testthat::quasi_label(enquo(object), label, arg = "object")
+ 3.     └─rlang::eval_bare(expr, quo_get_env(quo))
+
+══ DONE ════════════════════════════════════════════════════════════════════════

@@ -1,0 +1,11 @@
+## F-F01 mutant gepatcht=backtesting_1y_per_origin_year+backtesting_1y_per_reserve_class
+F-F01: 1....
+
+══ Failed ══════════════════════════════════════════════════════════════════════
+── 1. Error ('test-F-F01.R:36:4'): F-F01: 1y-Backtesting vergleicht nominale Erw
+Error: MUTANT: backtesting_1y_per_reserve_class
+Backtrace:
+    ▆
+ 1. └─backtesting_1y_per_reserve_class(...) at test-F-F01.R:36:4
+
+══ DONE ════════════════════════════════════════════════════════════════════════

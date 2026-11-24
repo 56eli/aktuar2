@@ -1,0 +1,18 @@
+## B-F02 patch gepatcht=add_transition_factor
+B-F02: 1...
+
+══ Failed ══════════════════════════════════════════════════════════════════════
+── 1. Failure ('test-B-F02.R:10:4'): B-F02 add_transition_factor bricht bei fehl
+`add_transition_factor(expanded, index_year = 2020)` threw an error with unexpected message.
+Expected match: "replacement has 0 rows"
+Actual message: "index_year must be contained in expanded_indices"
+Backtrace:
+    ▆
+ 1. ├─testthat::expect_error(...) at test-B-F02.R:10:4
+ 2. │ └─testthat:::quasi_capture(...)
+ 3. │   ├─testthat (local) .capture(...)
+ 4. │   │ └─base::withCallingHandlers(...)
+ 5. │   └─rlang::eval_bare(quo_get_expr(.quo), quo_get_env(.quo))
+ 6. └─sicr::add_transition_factor(expanded, index_year = 2020)
+
+══ DONE ════════════════════════════════════════════════════════════════════════

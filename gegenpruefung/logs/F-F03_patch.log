@@ -1,0 +1,12 @@
+## F-F03 patch gepatcht=backtesting_multiyears
+F-F03: 1.
+
+══ Failed ══════════════════════════════════════════════════════════════════════
+── 1. Error ('test-F-F03.R:27:4'): F-F03: Mehrjahres-Backtesting erfindet ohne F
+Error in `backtesting_multiyears(sim_result_series_old = x$sim, extended_claims_data_new = x$new, 
+    reserve_classes = 1, dev_years = 3)`: extended_claims_data_new must contain at least one calendar year after the reserving year
+Backtrace:
+    ▆
+ 1. └─sicr::backtesting_multiyears(...) at test-F-F03.R:27:4
+
+══ DONE ════════════════════════════════════════════════════════════════════════

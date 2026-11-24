@@ -1,0 +1,16 @@
+IBNR XL im Simulationsergebnis: 0 
+Prioritaet=NA Limit=NA
+n=1 IBNR-Zeilen: 43 von 831
+E-F01 Brutto Zukunft: original 125007664, korrigiert 125007664
+E-F01 Ceded XL:       original 11092473, korrigiert 11092473, Abweichung +0.00 %
+E-F01 Ceded Quota:    original 38380988, korrigiert 38380988, Abweichung +0.00 %
+E-F01 Netto Zukunft:  original 75534203, korrigiert 75534203, Abweichung +0.00 %
+E-F01 Netto/Anteil:   original 60.4237 %, korrigiert 60.4237 %
+IBNR XL im Simulationsergebnis: 1758024 
+Prioritaet=5e+05 Limit=1500000
+n=1 IBNR-Zeilen: 43 von 831
+E-F01 Brutto Zukunft: original 125007664, korrigiert 125007664
+E-F01 Ceded XL:       original 23122363, korrigiert 24880387, Abweichung -7.07 %
+E-F01 Ceded Quota:    original 38380988, korrigiert 38380988, Abweichung +0.00 %
+E-F01 Netto Zukunft:  original 63504313, korrigiert 61746289, Abweichung +2.85 %
+E-F01 Netto/Anteil:   original 50.8003 %, korrigiert 49.3940 %

@@ -1,0 +1,11 @@
+## E-F08 patch gepatcht=add_sicr_worksheet
+E-F08: 1.
+
+══ Failed ══════════════════════════════════════════════════════════════════════
+── 1. Failure ('test-E-F08.R:26:4'): E-F08: add_sicr_worksheet setzt die globale
+isTRUE(getOption("openxlsx2.string_nums")) is not TRUE
+
+`actual`:   FALSE
+`expected`: TRUE 
+
+══ DONE ════════════════════════════════════════════════════════════════════════

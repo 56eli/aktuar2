@@ -1,0 +1,11 @@
+## C-F05 mutant gepatcht=get_additive_ibnr_model
+C-F05: 1
+
+══ Failed ══════════════════════════════════════════════════════════════════════
+── 1. Error ('test-C-F05.R:24:4'): C-F05: Spaetgrossschaden im letzten Abwicklun
+Error: MUTANT: get_additive_ibnr_model
+Backtrace:
+    ▆
+ 1. └─get_additive_ibnr_model(...) at test-C-F05.R:24:4
+
+══ DONE ════════════════════════════════════════════════════════════════════════

@@ -1,0 +1,10 @@
+## E-F05 patch gepatcht=indices_ok
+E-F05: indices must not be NULL.1indices must not be NULL..indices must not be NULL..
+
+══ Failed ══════════════════════════════════════════════════════════════════════
+── 1. Failure ('test-E-F05.R:9:4'): E-F05: indices_ok gibt fuer NULL den Charact
+indices_ok(NULL, 1989, 2023) not identical to "FALSE".
+Modes: logical, character
+target is logical, current is character
+
+══ DONE ════════════════════════════════════════════════════════════════════════

@@ -1,0 +1,10 @@
+==== indices
+Fall                     E-F04        E-F05        E-V01        original    
+gueltig                  logical:TRUE logical:TRUE logical:TRUE logical:TRUE
+Calendar_year_als_double logical:TRUE logical:TRUE logical:TRUE logical:TRUE
+unsortiert               logical:FALSE logical:FALSE logical:FALSE logical:FALSE
+
+Abweichung vom Original (E-F04 / E-F05 / E-V01):
+gueltig                  gleich gleich gleich
+Calendar_year_als_double gleich gleich gleich
+unsortiert               gleich gleich gleich

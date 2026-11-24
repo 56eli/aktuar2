@@ -1,0 +1,96 @@
+/* Minimales Layout für den Foliensatz; Farben wie theme_aktuar(). */
+body {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  color: #222222;
+}
+
+.slides > slide {
+  background: #ffffff;
+}
+
+h1, h2, h3 {
+  color: #0072B2;
+  letter-spacing: 0;
+}
+
+h2 {
+  font-size: 30px;
+  margin-bottom: 12px;
+}
+
+.title-slide hgroup h1 {
+  color: #0072B2;
+  font-size: 42px;
+}
+
+.title-slide hgroup p {
+  color: #444444;
+  font-size: 20px;
+  line-height: 1.35;
+}
+
+p, li {
+  font-size: 18px;
+  line-height: 1.35;
+}
+
+.small, .small p, .small li {
+  font-size: 14px;
+}
+
+.gross {
+  font-size: 28px;
+  font-weight: 600;
+  line-height: 1.25;
+  color: #222222;
+}
+
+.kennzahlen {
+  display: flex;
+  gap: 26px;
+  margin: 18px 0 8px 0;
+}
+
+.kennzahlen > div {
+  flex: 1;
+  border-left: 4px solid #009E73;
+  padding-left: 10px;
+  font-size: 15px;
+  color: #444444;
+}
+
+.kennzahlen .zahl {
+  display: block;
+  font-size: 46px;
+  font-weight: 700;
+  line-height: 1.0;
+  color: #D55E00;
+}
+
+.quelle {
+  margin-top: 10px;
+  font-size: 11px;
+  color: #777777;
+}
+
+table {
+  font-size: 0.72em;
+}
+
+table th {
+  color: #0072B2;
+}
+
+code {
+  font-size: 0.78em;
+}
+
+pre {
+  font-size: 0.62em;
+  line-height: 1.25;
+}
+
+.hinweis {
+  color: #D55E00;
+  font-weight: 600;
+}

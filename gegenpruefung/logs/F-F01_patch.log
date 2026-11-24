@@ -1,0 +1,15 @@
+## F-F01 patch gepatcht=backtesting_1y_per_origin_year+backtesting_1y_per_reserve_class
+F-F01: .1.2....
+
+══ Failed ══════════════════════════════════════════════════════════════════════
+── 1. Failure ('test-F-F01.R:44:4'): F-F01: 1y-Backtesting vergleicht nominale E
+`actual` not equal to 1e+06/1.03.
+1/1 mismatches
+[1] 1e+06 - 970874 == 29126
+
+── 2. Failure ('test-F-F01.R:54:4'): F-F01: 1y-Backtesting vergleicht nominale E
+`actual2` not equal to 1e+06/1.03.
+1/1 mismatches
+[1] 1e+06 - 970874 == 29126
+
+══ DONE ════════════════════════════════════════════════════════════════════════

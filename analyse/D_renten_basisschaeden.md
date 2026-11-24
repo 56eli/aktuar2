@@ -47,7 +47,7 @@ R/annuity_functions.R setzt die anerkannten Renten (2.4.6) und die zukünftigen 
 
 ### `cl_factor()` — `R/small_claims.R:17-46`
 - **Zweck:** Chain-Ladder-Faktor eines Abwicklungsjahres, optional nur über die neuesten Anfalljahre.
-- **Paperbezug:** 2.3.1 S. 13 („übliche Verfahren der Schadenreservierung“), Anhang D.7 · konform · die Zeilenauswahl `last_row <- rows_count - dev_year`, `first_row <- max(1, last_row - volume + 1)` (Z. 39–40) entspricht dem oberen linken Dreieck und „neueste Kalenderjahre“.
+- **Paperbezug:** 2.3.1 S. 13 („übliche Verfahren der Schadenreservierung“), eigener Prüfpunkt D.7 · konform · die Zeilenauswahl `last_row <- rows_count - dev_year`, `first_row <- max(1, last_row - volume + 1)` (Z. 39–40) entspricht dem oberen linken Dreieck und „neueste Kalenderjahre“.
 - **Fehler:** keine gefunden. `dev_year >= n` bzw. `colsum_before == 0` werden mit Warnung und Faktor 1 abgefangen (Z. 22–25, 44–46).
 - **Verdacht (unbelegt):** Die Prüfung `rows_count < columns_count` (Z. 28) kommt erst nach der `dev_year >= n`-Warnung; bei `dev_year >= nrow` und mehr Spalten als Zeilen wird deshalb nicht der vorgesehene `stop()` erreicht. `dev_year = NA` führt zu einem unklaren Fehler.
 - **Verbesserungen:** keine.

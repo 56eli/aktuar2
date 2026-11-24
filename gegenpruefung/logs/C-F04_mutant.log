@@ -1,0 +1,27 @@
+## C-F04 mutant gepatcht=generate_xl_indices_per_claim
+C-F04: 12
+
+══ Failed ══════════════════════════════════════════════════════════════════════
+── 1. Error ('test-C-F04.R:73:4'): C-F04: Indexklausel greift schon im Basisjahr
+Error: MUTANT: generate_xl_indices_per_claim
+Backtrace:
+    ▆
+ 1. ├─testthat::expect_equal(...) at test-C-F04.R:73:4
+ 2. │ └─testthat::quasi_label(enquo(object), label, arg = "object")
+ 3. │   └─rlang::eval_bare(expr, quo_get_env(quo))
+ 4. └─xl_cashflow_mit_indices(indices, history_2015)
+ 5.   └─sicr::xl_cashflow(...) at test-C-F04.R:46:4
+ 6.     └─generate_xl_indices_per_claim(...)
+
+── 2. Error ('test-C-F04.R:82:4'): C-F04: Korrektur indexiert weiterhin ab dem J
+Error: MUTANT: generate_xl_indices_per_claim
+Backtrace:
+    ▆
+ 1. ├─testthat::expect_equal(...) at test-C-F04.R:82:4
+ 2. │ └─testthat::quasi_label(enquo(object), label, arg = "object")
+ 3. │   └─rlang::eval_bare(expr, quo_get_env(quo))
+ 4. └─xl_cashflow_mit_indices(indices, history_2016)
+ 5.   └─sicr::xl_cashflow(...) at test-C-F04.R:46:4
+ 6.     └─generate_xl_indices_per_claim(...)
+
+══ DONE ════════════════════════════════════════════════════════════════════════

@@ -1,0 +1,18 @@
+## E-F08 mutant gepatcht=add_sicr_worksheet
+E-F08: 12
+
+══ Failed ══════════════════════════════════════════════════════════════════════
+── 1. Error ('test-E-F08.R:20:4'): E-F08: add_sicr_worksheet setzt die globale O
+Error: MUTANT: add_sicr_worksheet
+Backtrace:
+    ▆
+ 1. └─add_sicr_worksheet(...) at test-E-F08.R:20:4
+
+── 2. Error ('test-E-F08.R:38:4'): E-F08: Korrektur stellt den alten Optionswert
+Error: MUTANT: add_sicr_worksheet
+Backtrace:
+    ▆
+ 1. └─add_sicr_worksheet_v(...) at test-E-F08.R:38:4
+ 2.   └─add_sicr_worksheet(...)
+
+══ DONE ════════════════════════════════════════════════════════════════════════

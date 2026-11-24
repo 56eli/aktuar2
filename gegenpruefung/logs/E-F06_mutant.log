@@ -1,0 +1,24 @@
+## E-F06 mutant gepatcht=mortality_ok
+E-F06: 1At least one Probability in mortality is not between 0 and 1.
+.2
+
+══ Failed ══════════════════════════════════════════════════════════════════════
+── 1. Error ('test-E-F06.R:13:4'): E-F06: mortality_ok prueft die Wahrscheinlich
+Error: MUTANT: mortality_ok
+Backtrace:
+    ▆
+ 1. ├─testthat::expect_true(mortality_ok(mortality_bad)) at test-E-F06.R:13:4
+ 2. │ └─testthat::quasi_label(enquo(object), label, arg = "object")
+ 3. │   └─rlang::eval_bare(expr, quo_get_env(quo))
+ 4. └─mortality_ok(mortality_bad)
+
+── 2. Error ('test-E-F06.R:32:4'): E-F06: Korrektur erkennt unzulaessige Wahrsch
+Error: MUTANT: mortality_ok
+Backtrace:
+    ▆
+ 1. ├─testthat::expect_true(mortality_ok(mortality_good)) at test-E-F06.R:32:4
+ 2. │ └─testthat::quasi_label(enquo(object), label, arg = "object")
+ 3. │   └─rlang::eval_bare(expr, quo_get_env(quo))
+ 4. └─mortality_ok(mortality_good)
+
+══ DONE ════════════════════════════════════════════════════════════════════════

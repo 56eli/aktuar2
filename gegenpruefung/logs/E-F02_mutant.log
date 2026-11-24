@@ -1,0 +1,20 @@
+## E-F02 mutant gepatcht=aggregate_large_claims_results
+E-F02: 12
+
+══ Failed ══════════════════════════════════════════════════════════════════════
+── 1. Error ('test-E-F02.R:72:4'): E-F02: Quote wird ueber die Zeilenposition st
+Error: MUTANT: aggregate_large_claims_results
+Backtrace:
+    ▆
+ 1. └─run_aggregate(aggregate_large_claims_results) at test-E-F02.R:72:4
+ 2.   └─fun(...) at test-E-F02.R:61:4
+
+── 2. Error ('test-E-F02.R:84:4'): E-F02: Korrektur ordnet die Quote dem Anfallj
+Error: MUTANT: aggregate_large_claims_results
+Backtrace:
+    ▆
+ 1. └─run_aggregate(aggregate_large_claims_results_v) at test-E-F02.R:84:4
+ 2.   └─fun(...) at test-E-F02.R:61:4
+ 3.     └─aggregate_large_claims_results(...)
+
+══ DONE ════════════════════════════════════════════════════════════════════════

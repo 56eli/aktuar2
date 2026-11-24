@@ -1,0 +1,18 @@
+## C-F03 patch gepatcht=get_expected_ibnr_numbers
+C-F03: .12..
+
+══ Failed ══════════════════════════════════════════════════════════════════════
+── 1. Failure ('test-C-F03.R:31:4'): C-F03: unsortierte exposure wird falsch zug
+unname(shuffled["2023", ]) not equal to c(0, 0, 0).
+3/3 mismatches (average diff: 12.7)
+[1] 23.75 - 0 == 23.75
+[2]  9.50 - 0 ==  9.50
+[3]  4.75 - 0 ==  4.75
+
+── 2. Failure ('test-C-F03.R:33:4'): C-F03: unsortierte exposure wird falsch zug
+isTRUE(...) is not FALSE
+
+`actual`:   TRUE 
+`expected`: FALSE
+
+══ DONE ════════════════════════════════════════════════════════════════════════
