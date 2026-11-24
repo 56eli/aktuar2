@@ -21,8 +21,8 @@ docker run --rm aktuar-r:1 Rscript -e 'library(sicr); cat(as.character(packageVe
 # 1.1.1 c0ad2ade80dad83b1d6faec1bd4e34bd20233c92 R version 4.4.2 (2024-10-31)
 ```
 
-Auf dem Host gilt: `/srv/<seat>` muss für den Container lesbar sein (`chmod o+rx`), sonst bricht der
-Mount mit `Permission denied` ab, und Docker läuft nur über den Ladder-Lease (`~/bin/escalate run`).
+Der Klon muss für die UID, mit der der Container läuft (`-u`), lesbar sein; dafür genügen Eigentümer-
+oder Gruppenrechte. Verzeichnisse nicht für alle (`o+rx`) freigeben.
 
 Der Aufruf, mit dem alle folgenden Schritte laufen (`$A` = Verzeichnis des Audit-Klons, `$S` = des
 sicr-Klons):

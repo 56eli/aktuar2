@@ -1,0 +1,125 @@
+---
+title: "Audit des R-Pakets sicr 1.1.1"
+subtitle: "Prüfobjekt: sicr 1.1.1 · Commit c0ad2ad · DAV-Ergebnisbericht 04.02.2025"
+author: "aktuar2 · Runde 3, 2026-11-24"
+date: "Alle Zahlen in R gerechnet; Quellen in den Fußzeilen"
+output:
+  ioslides_presentation:
+    self_contained: true
+    widescreen: true
+    css: stil.css
+---
+
+```{r setup, include = FALSE}
+wurzel <- normalizePath(Sys.getenv("AKTUAR_ROOT", ".."))
+source("../skripte/grafiken.R")
+```
+
+## Methode in drei Runden
+
+| Runde | Ordner | Ergebnis |
+|---|---|---|
+| 1 – Audit | `analyse/`, `befunde/`, `verbesserungen/`, `bericht/` | 30 Fehler, 12 Verbesserungen, 46 eigene Prüfpunkte |
+| 2 – Gegenprüfung | `gegenpruefung/` | alle 30 Fehler both-ways; E-F01 kritisch→hoch; „Anhang D“ widerlegt |
+| 3 – Nachprüfung | `nachpruefung/` | F-F01 +5,95 %; D.11.4 ohne Paperbezug; 10/10 + 12/12 Mutanten |
+
+<div class="quelle">Quelle: bericht/bericht.md, gegenpruefung/bericht.md, nachpruefung/bericht.md</div>
+
+## Ergebnis auf einen Blick
+
+<div class="kennzahlen">
+<div><span class="zahl">46</span>Prüfpunkte<br>31 konform · 10 konform (Fehler)<br>2 abweichend · 2 optional · 1 ohne Paperbezug</div>
+<div><span class="zahl">30</span>belegte Fehler<br>0 kritisch · 8 hoch<br>17 mittel · 5 niedrig</div>
+<div><span class="zahl">76</span>Test-Blöcke<br>200 Assertions<br>alle grün</div>
+<div><span class="zahl">12</span>Verbesserungen<br>6 gemessen schneller<br>2 langsamer, nur Lesbarkeit</div>
+</div>
+
+<div class="quelle">Quellen: analyse/*.md, ergebnisse/testergebnisse.csv, nachpruefung/ergebnisse/benchmarks_spanne_zusammenfassung.csv</div>
+
+## Paperabgleich
+
+```{r paper, fig.height = 4.1}
+grafik_paper(wurzel)
+```
+
+<span class="hinweis">Kein Anhang D:</span> Die 46 Punkte D.1–D.11 sind eine eigene Checkliste aus Kapitel 2
+(S. 10–19). Der Bericht endet bei 3.2.9 (S. 58).
+
+<div class="quelle">Quelle: analyse/paper_abgleich.md</div>
+
+## Fehler nach Schwere und Gruppe
+
+```{r schwere, fig.height = 4.1}
+grafik_schwere(wurzel)
+```
+
+<div class="quelle">Quelle: analyse/A_*.md bis analyse/F_*.md</div>
+
+## Wirkung der schweren Befunde
+
+```{r wirkung, fig.height = 4.8}
+grafik_wirkung(wurzel)
+```
+
+<div class="quelle">Quellen: nachpruefung/ergebnisse/wirkung.csv und f_f01_vignette.csv. Permutationswerte: Seed 42, Illustration.</div>
+
+## Belastbarkeit der Tests
+
+```{r testmatrix, fig.height = 4.4}
+grafik_testmatrix_kompakt(wurzel)
+```
+
+Runde 2: 30/30 both-ways. Runde 3: 10/10 eigene Mutanten, 12/12 Verbesserungsmutanten.
+
+<div class="quelle">Quellen: gegenpruefung/both_ways.csv; nachpruefung/ergebnisse/both_ways_stichprobe.csv und mutanten_verbesserungen.csv</div>
+
+## Benchmarks als Spannen
+
+```{r benchmarks, fig.height = 4.4}
+grafik_benchmarks(wurzel)
+```
+
+Fünf Läufe: A-V01 1,7–2,0× · C-V02 8,2–11,4× · D-V01 3,1–4,4× · D-V02 3,2–4,2× · E-V01 6,4–6,6× · F-V01 2,2–2,5×.
+A-V02 und B-V02 sind langsamer und bleiben Lesbarkeitsverbesserungen.
+
+<div class="quelle">Quelle: nachpruefung/ergebnisse/benchmarks_spanne_zusammenfassung.csv</div>
+
+## Was die Gegenprüfungen geändert haben
+
+```{r runden, fig.height = 4.2}
+grafik_runden(wurzel)
+```
+
+<div class="quelle">Quellen: analyse/*.md, gegenpruefung/bericht.md, nachpruefung/bericht.md</div>
+
+## Grenzen
+
+- E-F01 ist mit **n = 1** und Seed 12345 gemessen; die Größe hängt vom Bestand und der Priorität ab.
+- Die Permutationszahlen zu B-F01, C-F03 und D-F03/E-F02 sind **seed-abhängig** (Seed 42).
+- Die eigenen Mutanten decken **10 der 30** Fehler ab, nicht alle.
+- Die Verbesserungsmutanten verändern die **Ausgabe** der echten `_v()`, nicht deren Code.
+- Das PDF wurde über **Textextraktion** durch einen Worker geprüft, nicht visuell Zeile für Zeile.
+
+<div class="quelle">Quelle: nachpruefung/bericht.md, Abschnitt „Grenzen“</div>
+
+## Nächste Schritte
+
+- `gegenpruefung/upstream.md` ist übergabereif; über eine Weitergabe entscheidet der **Owner**.
+- Das **Ultimate-Backtesting** bleibt eine optionale Erweiterung (Anwendung der UAG, keine Paketanforderung).
+- Die Wirkung auf **realen Beständen** ist offen; die Beispieldaten sind kein Portfolio.
+- Die 46 Prüfpunkte sollten künftig als eigene Checkliste zitiert werden, nicht als „Anhang D“.
+
+<div class="quelle">Quelle: gegenpruefung/upstream.md, nachpruefung/bericht.md</div>
+
+## Reproduktion
+
+```sh
+docker build -t aktuar-r:1 docker
+docker run --rm -v "$PWD":/work -w /work aktuar-r:1 Rscript skripte/tests_ausfuehren.R
+docker run --rm -v "$PWD":/work -w /work aktuar-r:1 Rscript skripte/render.R
+```
+
+Runde 3: siehe `nachpruefung/README.md` (wirkung.R, both_ways_stichprobe.R,
+mutanten_verbesserungen.R, benchmarks_spanne.R 5, f_f01_vignette.R).
+
+<div class="quelle">Quelle: README.md, nachpruefung/README.md</div>

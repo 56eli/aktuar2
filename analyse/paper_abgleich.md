@@ -1,6 +1,6 @@
 # Paperabgleich-Matrix: sicr 1.1.1 gegen DAV-Ergebnisbericht „Stochastische Einzelschadenreservierung“ (04.02.2025)
 
-Die Matrix prüft das R-Paket sicr 1.1.1 gegen die Prüf-Checkliste D.1–D.11 des DAV-Ergebnisberichts. Skala: konform (Standard umgesetzt oder per Parameter wählbar), konform (Fehler) (Methode wie im Paper umgesetzt, aber durch einen belegten Programmierfehler beeinträchtigt; die Befund-ID bleibt stehen), abweichend (methodisch andere Umsetzung, z. B. fehlendes Abwicklungsjahr N, kein AAD/AAL), fehlt, Erweiterung, nicht im Paper. Die Spalte Begründung (max. 25 Wörter) erläutert jede Einstufung, die nicht schlicht konform ist. Diskussionspunkte aus Kapitel 3.2 sind nur Hinweise; maßgeblich sind Anhang D, der Code und die Einstufungen in `analyse/A_*.md` bis `analyse/F_*.md`.
+Die Matrix prüft das R-Paket sicr 1.1.1 gegen eine eigene Prüf-Checkliste D.1–D.11, die aus Kapitel 2 des DAV-Ergebnisberichts („Vorgehen im Detail“, S. 10–19) abgeleitet ist. Der veröffentlichte Bericht hat **keinen Anhang D**; sein Inhaltsverzeichnis endet bei 3.2.9 (S. 58). Die 46 Punkte sind also die Gliederung dieser Prüfung, keine Zusage des Berichts. Skala: konform (Standard umgesetzt oder per Parameter wählbar), konform (Fehler) (Methode wie im Paper umgesetzt, aber durch einen belegten Programmierfehler beeinträchtigt; die Befund-ID bleibt stehen), abweichend (methodisch andere Umsetzung, z. B. fehlendes Abwicklungsjahr N, kein AAD/AAL), optional (Empfehlung oder Anwendung, keine Paketanforderung), kein Paperbezug (der Bericht enthält dazu keine Aussage), Erweiterung, nicht im Paper. Die Spalte Begründung (max. 25 Wörter) erläutert jede Einstufung, die nicht schlicht konform ist. Diskussionspunkte aus Kapitel 3.2 sind nur Hinweise; maßgeblich sind die Checkliste, der Code und die Einstufungen in `analyse/A_*.md` bis `analyse/F_*.md`.
 
 ## D.1 Daten und Vorverarbeitung
 
@@ -17,7 +17,7 @@ Die Matrix prüft das R-Paket sicr 1.1.1 gegen die Prüf-Checkliste D.1–D.11 d
 | Nr. | Anforderung (eigene Worte, max. 15 Wörter, Seitenzahl) | Umsetzung in sicr (Funktion, R/datei.R:Zeile) | Einstufung | Befund-ID(s) aus analyse/ oder – | Begründung |
 |---|---|---|---|---|---|
 | D.2.1 | Großschaden: indexierter Aufwand überschreitet G mindestens einmal, danach dauerhaft (S. 11) | `filter_large_claims()` `R/data_functions.R:394-413` | konform | – | – |
-| D.2.2 | G unterhalb der minimalen RV-Priorität aller Schadenjahre wählen (S. 11) | Keine Prüfung von `threshold` gegen `reinsurance$Priority`; `prepare_data()` `R/data_functions.R:726-733`, `xl_cashflow()` `R/reinsurance.R:296-303` | fehlt | – | Keine Prüfung, dass G unter der minimalen RV-Priorität aller Schadenjahre liegt. |
+| D.2.2 | G unterhalb der minimalen RV-Priorität aller Schadenjahre wählen (S. 11) | Keine Prüfung von `threshold` gegen `reinsurance$Priority`; `prepare_data()` `R/data_functions.R:726-733`, `xl_cashflow()` `R/reinsurance.R:296-303` | optional | – | Empfehlung („sollte“, S. 11), keine Paketanforderung; eine Prüfung wäre gleichwohl nützlich. |
 | D.2.3 | Methode 3: HGB-Reserve ins Großschadendreieck, frühere Zahlungen zu Basis (S. 11) | `filter_large_claims()` `R/data_functions.R:410-413`; `generate_triangle()` `R/basic.R:112-117`; `compute_small_claims()` `R/small_claims.R:489-503` | konform | – | – |
 | D.2.4 | Zahlung im Jahr des Großwerdens den Großschäden zuordnen (S. 12) | `generate_triangle()` `R/basic.R:112-117`; `Dev_year_since_large` `R/data_functions.R:410-413` | konform | – | – |
 
@@ -89,7 +89,7 @@ Die Matrix prüft das R-Paket sicr 1.1.1 gegen die Prüf-Checkliste D.1–D.11 d
 |---|---|---|---|---|---|
 | D.10.1 | Best Estimate als Erwartungswert; zusätzlich Verteilung, Konfidenzintervalle und VaR (S. 7, 55) | `sicr()` Mittelwert `R/sicr.R:535-540`; Standardfehler `:266-281`; Summary `:609-610` | konform | – | Best Estimate und Standardfehler sind umgesetzt; Verteilung, Konfidenzintervalle und VaR nennt das Paper nur als Möglichkeit. |
 | D.10.2 | Cashflow-Backtesting: prognostizierte vs. tatsächliche Zahlung im ersten Folgejahr (S. 22) | `backtesting_1y_per_reserve_class()` `R/plots.R:1209-1350`; `backtesting_1y_per_origin_year()` `R/plots.R:1434-1577`; `backtesting_1y_single_per_dev_year()` `R/plots.R:1667-1871` | konform (Fehler) | F-F01, F-F02 | Cashflow-Backtesting ist umgesetzt; F-F01 vergleicht nominale Erwartung mit indexiertem Ist, F-F02 vertauscht die Quantilslegenden. |
-| D.10.3 | Ultimate-Backtesting gegen Benchmark 9 % bzw. 10 % durchführen (S. 22, 43, 49) | Keine Funktion vorhanden | fehlt | F-H01 | Ultimate-Backtesting gegen die Benchmarks 9 % und 10 % fehlt vollständig (F-H01). |
+| D.10.3 | Ultimate-Backtesting gegen Benchmark 9 % bzw. 10 % durchführen (S. 22, 43, 49) | Keine Funktion vorhanden | optional | F-H01 | Anwendung der UAG (Kap. 3), keine Paketanforderung; das Cashflow-Backtesting ist vorhanden (F-H01). |
 | D.10.4 | Sensitivitäten für Stichjahre, G, M, Klassen, Inflation und Abwicklungslänge ermöglichen (S. 23–24 u. a.) | `prepare_data()` `R/data_functions.R:726-733`; `generate_pools()` `R/generate_pools.R:61-68`; `add_transition_factor()` `R/data_functions.R:77-82` | konform | – | – |
 | D.10.5 | Simulationskonvergenz und 1–2 % Rauschen bei Sensitivitäten berücksichtigen (S. 40) | `se()` `R/sicr.R:266-281`; Summary `R/sicr.R:609-610` | konform | – | – |
 | D.10.6 | Variationsanalyse: alte Pools behalten, Abwicklungsstände und Parameter schrittweise ändern (S. 57) | Keine eigene Funktion; manuell über `sicr()` `R/sicr.R:113-128` mit Vorjahres-Pools; Beispiel `vignettes/sicr.Rmd:957-1024` | konform | – | Keine eigene Funktion nötig; Vorjahres-Pools und aktualisierte Daten lassen sich manuell an sicr() übergeben. |
@@ -101,7 +101,7 @@ Die Matrix prüft das R-Paket sicr 1.1.1 gegen die Prüf-Checkliste D.1–D.11 d
 | D.11.1 | G, M, T, Klassen, Historienlänge, Ausschlüsse, Indexreihe und Indexjahr dokumentieren (S. 57) | `prepare_data()` `R/data_functions.R:560-637`; `generate_pools()` `R/generate_pools.R:3-12`; `add_transition_factor()` `R/data_functions.R:84-100`; Vignette `vignettes/sicr.Rmd:145-166, 304, 417-421` | konform | – | – |
 | D.11.2 | Behandlung von Renten, Sonderschäden, Spätgroßschäden und Basisschäden dokumentieren (S. 13, 16–18) | `R/annuity_functions.R:88-104`; `R/special_claims.R:102-120`; `R/ibnr.R:318-336`; `compute_small_claims()` `R/small_claims.R:444-467` | konform | C-H03 | – |
 | D.11.3 | RV-Programm und verwendete Vereinfachungen dokumentieren (S. 18–19) | `xl_cashflow()` `R/reinsurance.R:126-188`; `reinsurance_xmpl` `R/data.R:221-238` | konform | C-H05 | – |
-| D.11.4 | Backtesting- und Sensitivitätsergebnisse je Bestand dokumentieren (S. 20–54) | Keine Ergebnissammlung im Paket; nur Backtesting-Funktionen `R/plots.R:1209-2120` | fehlt | F-H01 | Eine Ergebnissammlung je Bestand fehlt; nur Backtesting-Funktionen sind vorhanden (F-H01). |
+| D.11.4 | Backtesting- und Sensitivitätsergebnisse je Bestand dokumentieren (S. 20–54) | Keine Ergebnissammlung im Paket; nur Backtesting-Funktionen `R/plots.R:1209-2120` | kein Paperbezug | – | Das Paper enthält kein Wort „Dokumentation“; eine Ergebnissammlung je Bestand ist Anwenderpflicht, keine Paketanforderung. |
 
 ## Zusammenfassung
 
@@ -110,9 +110,9 @@ Die Matrix prüft das R-Paket sicr 1.1.1 gegen die Prüf-Checkliste D.1–D.11 d
 | konform | 31 |
 | konform (Fehler) | 10 |
 | abweichend | 2 |
-| fehlt | 3 |
-| Erweiterung | 0 |
-| nicht im Paper | 0 |
+| optional | 2 |
+| kein Paperbezug | 1 |
+| fehlt | 0 |
 | **Gesamt** | **46** |
 
-*D.3.2, D.4.4, D.10.1, D.10.6 und D.5.5 sind nach erneuter Prüfung konform (D.5.5 von cl1 am Code geprüft: `R/sicr.R:475` rollt neue Renten über 130 Jahre aus). Grenzfälle bleiben D.6.1 (fehlendes Abwicklungsjahr N neben dem Sortierfehler C-F03) und D.9.1 (fehlendes AAD/AAL neben C-F02/C-F04). D.11.4 ist eine Dokumentationspflicht des Anwenders; „fehlt“ heißt hier nur, dass das Paket keine Ergebnissammlung anbietet.*
+*D.3.2, D.4.4, D.10.1, D.10.6 und D.5.5 sind nach erneuter Prüfung konform (D.5.5 von cl1 am Code geprüft: `R/sicr.R:475` rollt neue Renten über 130 Jahre aus). Grenzfälle bleiben D.6.1 (fehlendes Abwicklungsjahr N neben dem Sortierfehler C-F03) und D.9.1 (fehlendes AAD/AAL neben C-F02/C-F04). D.2.2 und D.10.3 sind Empfehlung bzw. Anwendung der UAG und damit optional; D.11.4 hat keinen Paperbezug. Es fehlt kein Punkt.*

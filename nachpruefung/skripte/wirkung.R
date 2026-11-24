@@ -351,6 +351,6 @@ add_row("F-F01", "Verzerrung hypothetisches Backtesting 2027, Faktor nominal/def
         anmerkung = "Transition_factor[2027]/Transition_factor[2022]; Korrektur vergleicht nominal, Faktor 1")
 
 erg <- do.call(rbind, zeilen)
-write.csv(erg, file.path(outdir, "wirkung.csv"), row.names = FALSE, quote = FALSE)
+write.csv(erg, file.path(outdir, "wirkung.csv"), row.names = FALSE, quote = TRUE)
 cat("Geschrieben:", file.path(outdir, "wirkung.csv"), "\n")
 print(erg, row.names = FALSE)

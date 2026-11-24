@@ -1,5 +1,7 @@
 # Gegenuntersuchung des sicr-Audits — Bericht
 
+> Stand Runde 2. Die Nachprüfung (Runde 3) bestätigt das Urteil und korrigiert F-F01 und D.11.4: [nachpruefung/bericht.md](../nachpruefung/bericht.md).
+
 ## Urteil
 
 Das Audit hält. Alle 30 Fehlerbefunde lassen sich gegen unverändertes sicr nachstellen, und alle 30
